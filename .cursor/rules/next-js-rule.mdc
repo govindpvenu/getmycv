@@ -33,6 +33,8 @@ UI and Styling
 
 - Use Shadcn UI, Radix, and Tailwind for components and styling.
 - Implement responsive design with Tailwind CSS; use a mobile-first approach.
+- use lucide-react for icons.
+- use framer-motion(now motion) for animation.
 
 Performance Optimization
 
@@ -46,8 +48,14 @@ Key Conventions
 - Use 'nuqs' for URL search parameter state management.
 - Optimize Web Vitals (LCP, CLS, FID).
 - Limit 'use client':
-    - Favor server components and Next.js SSR.
-    - Use only for Web API access in small components.
-    - Avoid for data fetching or state management.
+  - Favor server components and Next.js SSR.
+  - Use only for Web API access in small components.
+  - Avoid for data fetching or state management.
+
+Form Handling
+
+- Use react-hook-form','zod' and shadcn ui components for creating forms.
+- Refer this doc : @https://ui.shadcn.com/docs/forms/react-hook-form to learn how to build forms.
+- Always validate on server and client.
 
 Follow Next.js docs for Data Fetching, Rendering, and Routing.
