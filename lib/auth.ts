@@ -31,34 +31,43 @@ export const auth = betterAuth({
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url, token }, request) => {
       console.log(`user: ${user}, url: ${url}, token: ${token}`);
-      // await sendEmail({
-      //   to: user.email,
-      //   subject: "Reset your password",
-      //   text: `Click the link to reset your password: ${url}`,
-      // });
+      await sendEmail({
+        email: user.email,
+        subject: "Reset your password",
+        text: `Click the link to reset your password: ${url}`,
+      });
     },
     onPasswordReset: async ({ user }, request) => {
-      // your logic here
       console.log(`Password for user ${user.email} has been reset.`);
-
       // Notify user
-      // sendSecurityEmail({
-      //   to: user.email,
-      //   subject: "Your password was changed",
-      //   text:
-      //     "If you didn’t make this change, reset your password again and contact support.",
-      // }),
+      await sendEmail({
+        email: user.email,
+        subject: "Your password was changed",
+        text: `Password for user ${user.email} has been reset. If you didn't make this change, reset your password again and contact support.`,
+      });
     },
   },
   socialProviders: {
     github: {
       clientId: process.env.GITHUB_CLIENT_ID as string,
       clientSecret: process.env.GITHUB_CLIENT_SECRET as string,
+      mapProfileToUser: (profile) => {
+        return {
+          first_name: profile.name.split(" ")[0],
+          last_name: profile.name.split(" ")[1],
+        };
+      },
     },
     google: {
       prompt: "select_account",
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+      mapProfileToUser: (profile) => {
+        return {
+          first_name: profile.given_name,
+          last_name: profile.family_name,
+        };
+      },
     },
   },
   account: {
@@ -73,11 +82,17 @@ export const auth = betterAuth({
       async sendVerificationOTP({ email, otp, type }) {
         console.log(`Sending OTP: ${otp}, to ${email},for ${type}`);
         if (type === "sign-in") {
-          await sendEmail({ email, otp });
-          await sendEmailVerification(email, otp);
+          await sendEmail({
+            email,
+            subject: "One-Time Password",
+            text: `Your one-time password for sign-in is ${otp}`,
+          });
         } else if (type === "email-verification") {
-          //This is from resend.
-          await sendEmailVerification(email, otp);
+          await sendEmail({
+            email,
+            subject: "Email Verification",
+            text: `Your one-time password for email verification is ${otp}`,
+          });
         } else {
           // Send the OTP for password reset
         }
@@ -88,31 +103,4 @@ export const auth = betterAuth({
   ], // make sure this is the last plugin in the array
 });
 
-async function sendEmailVerification(email: string, otp: string) {
-  try {
-    const baseUrl = process.env.BETTER_AUTH_URL || "http://localhost:3000";
-    const response = await fetch(`${baseUrl}/api/send-email-verification`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ email, otp }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(
-        `Failed to send email verification: ${
-          errorData.error || response.statusText
-        }`
-      );
-    }
-
-    const result = await response.json();
-    console.log("Email verification sent successfully:", result);
-  } catch (error) {
-    console.error("Error sending email verification:", error);
-    throw error;
-  }
-}
 export type Session = typeof auth.$Infer.Session;
