@@ -1,6 +1,7 @@
 import { auth } from "@/lib/auth";
 import { SidebarMain } from "./_components/SidebarMain";
 import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 export default async function DashboardLayout({
   children,
 }: {
@@ -9,11 +10,8 @@ export default async function DashboardLayout({
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  console.log("session:", session);
 
-  if (!session) {
-    return null;
-  }
+  if (!session) redirect("/sign-in");
   return (
     <div
       className={

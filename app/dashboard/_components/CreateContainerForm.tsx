@@ -1,10 +1,8 @@
 "use client";
 import * as z from "zod";
-import { formSchema } from "@/lib/schema";
-import { createContainerAction } from "@/actions/create-container";
+import { containerSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { useAction } from "next-safe-action/hooks";
 import { motion } from "motion/react";
 import { Check } from "lucide-react";
 import {
@@ -20,8 +18,9 @@ import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
+import { upload } from "@vercel/blob/client";
 
-type Schema = z.infer<typeof formSchema>;
+type Schema = z.infer<typeof containerSchema>;
 
 function slugify(input: string) {
   return input
@@ -33,7 +32,7 @@ function slugify(input: string) {
 
 export function CreateContainerForm() {
   const form = useForm<Schema>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(containerSchema),
     defaultValues: {
       title: "",
       slug: "",
@@ -42,56 +41,29 @@ export function CreateContainerForm() {
     },
     mode: "onSubmit",
   });
-  const formAction = useAction(createContainerAction, {
-    onSuccess: () => {
-      // TODO: show success message
-      form.reset();
-      toast.success("Container created successfully");
-    },
-    onError: (error) => {
-      // TODO: show error message
-      toast.error(error.error.serverError || "Something went wrong");
-    },
-  });
 
   const handleSubmit = form.handleSubmit(async (data: Schema) => {
     console.log("handleSubmit data:", data);
-    formAction.execute(data);
+    try {
+      const newBlob = await upload(data.resume.name, data.resume, {
+        access: "public",
+        handleUploadUrl: "/api/resume/upload",
+        clientPayload: JSON.stringify({
+          title: data.title,
+          slug: data.slug,
+          is_private: data.is_private,
+        }),
+      });
+
+      console.log("newBlob:", newBlob);
+    } catch (error) {
+      console.error("error:", error);
+      toast.error("Failed to create container");
+    } finally {
+      form.reset();
+    }
   });
 
-  const { isExecuting, hasSucceeded } = formAction;
-  if (hasSucceeded) {
-    return (
-      <div className="p-2 sm:p-5 md:p-8 w-full rounded-md gap-2 border">
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, stiffness: 300, damping: 25 }}
-          className="h-full py-6 px-3"
-        >
-          <motion.div
-            initial={{ scale: 0.5 }}
-            animate={{ scale: 1 }}
-            transition={{
-              delay: 0.3,
-              type: "spring",
-              stiffness: 500,
-              damping: 15,
-            }}
-            className="mb-4 flex justify-center border rounded-full w-fit mx-auto p-2"
-          >
-            <Check className="size-8" />
-          </motion.div>
-          <h2 className="text-center text-2xl text-pretty font-bold mb-2">
-            Thank you
-          </h2>
-          <p className="text-center text-lg text-pretty text-muted-foreground">
-            Form submitted successfully, we will get back to you soon
-          </p>
-        </motion.div>
-      </div>
-    );
-  }
   return (
     <form onSubmit={handleSubmit} className="flex flex-col  w-full  gap-2 ">
       <FieldGroup>
@@ -192,7 +164,7 @@ export function CreateContainerForm() {
         />
 
         <Button type="submit" size="sm">
-          {isExecuting ? <Spinner /> : "Create Container"}
+          {form.formState.isSubmitting ? <Spinner /> : "Create Container"}
         </Button>
       </FieldGroup>
     </form>

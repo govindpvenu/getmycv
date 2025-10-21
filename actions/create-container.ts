@@ -1,10 +1,10 @@
 "use server";
 
 import { actionClient } from "@/actions/safe-action";
-import { formSchema } from "@/lib/schema";
+import { containerSchema } from "@/lib/schema";
 
 export const createContainerAction = actionClient
-  .inputSchema(formSchema)
+  .inputSchema(containerSchema)
   .action(async ({ parsedInput }) => {
     // do something with the data
     console.log("parsedInput From createContainerAction:", parsedInput);

@@ -13,7 +13,7 @@ export async function proxy(request: NextRequest) {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  console.log("session:", session);
+  // console.log("session:", session);
 
   const isAuthRoute = authRoutes.includes(request.nextUrl.pathname);
 

@@ -9,7 +9,7 @@ export interface ActionResponse<T = any> {
   inputs?: T;
 }
 
-export const formSchema = z.object({
+export const containerSchema = z.object({
   title: z.string().min(1, "This field is required"),
   slug: z.string().min(1, "This field is required"),
   is_private: z.literal(true, { error: "This field is required" }),
