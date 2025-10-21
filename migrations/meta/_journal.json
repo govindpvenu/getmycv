@@ -8,6 +8,20 @@
       "when": 1760598470969,
       "tag": "0000_flawless_oracle",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1761040456488,
+      "tag": "0001_bright_bug",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1761041655501,
+      "tag": "0002_lively_raider",
+      "breakpoints": true
     }
   ]
 }

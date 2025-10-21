@@ -34,8 +34,8 @@ export function CreateContainerForm() {
   const form = useForm<Schema>({
     resolver: zodResolver(containerSchema),
     defaultValues: {
-      title: "",
-      slug: "",
+      title: "Full Stack Developer",
+      slug: "full-stack-developer",
       is_private: true,
       resume: undefined,
     },
@@ -56,8 +56,9 @@ export function CreateContainerForm() {
       });
 
       console.log("newBlob:", newBlob);
-    } catch (error) {
+    } catch (error: any) {
       console.error("error:", error);
+      console.log("error:", error?.message);
       toast.error("Failed to create container");
     } finally {
       form.reset();
@@ -73,6 +74,7 @@ export function CreateContainerForm() {
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="gap-1">
               <FieldLabel htmlFor="title">Title *</FieldLabel>
+
               <Input
                 {...field}
                 id="title"

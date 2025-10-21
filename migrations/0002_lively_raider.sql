@@ -1,0 +1,1 @@
+ALTER TABLE "container" ADD COLUMN "resume_url" text NOT NULL;

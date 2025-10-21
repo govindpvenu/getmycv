@@ -5,6 +5,9 @@ const nextConfig: NextConfig = {
   experimental: {
     turbopackFileSystemCacheForDev: true,
   },
+  allowedDevOrigins: [
+    "https://unspiritualising-bursarial-royce.ngrok-free.dev",
+  ],
 };
 
 export default nextConfig;
