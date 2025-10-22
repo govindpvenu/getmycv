@@ -6,7 +6,10 @@ const nextConfig: NextConfig = {
     turbopackFileSystemCacheForDev: true,
   },
   allowedDevOrigins: [
-    "https://unspiritualising-bursarial-royce.ngrok-free.dev",
+    "unspiritualising-bursarial-royce.ngrok-free.dev",
+    "*.unspiritualising-bursarial-royce.ngrok-free.dev",
+    "localhost:3000",
+    "*.localhost:3000",
   ],
 };
 
