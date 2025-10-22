@@ -1,14 +1,10 @@
-export default function DashboardPage() {
-  return (
-    <div className="flex flex-1">
-      <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
-        <CreateContainerCard />
-      </div>
-    </div>
-  );
-}
-
-import { PackagePlus } from "lucide-react";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
+import { db } from "@/db/drizzle";
+import { container, containerSchema } from "@/db/schemas";
+import { eq } from "drizzle-orm";
+import { FileBox, PackagePlus } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -28,10 +24,63 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { containerType } from "@/types/containerTypes";
+import Link from "next/link";
+
+export default async function DashboardPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  if (!session) redirect("/sign-in");
+  const containers = await db
+    .select()
+    .from(container)
+    .where(eq(container.userId, session.user.id));
+  console.log("containers: ", containers);
+
+  return (
+    <div className="flex flex-1">
+      <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
+        <ContainerList containers={containers} />
+      </div>
+    </div>
+  );
+}
+
+function ContainerList({ containers }: { containers: containerType[] }) {
+  return (
+    <div className="flex flex-row gap-4 border flex-wrap overflow-y-auto">
+      <CreateContainerCard />
+      {containers.map((container) => (
+        <ContainerCard key={container.id} container={container} />
+      ))}
+    </div>
+  );
+}
+
+function ContainerCard({ container }: { container: containerType }) {
+  return (
+    <Card className="w-full max-w-xs  h-96 flex justify-center bg-accent items-center ">
+      <CardHeader>
+        <CardTitle>{container.title}</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <FileBox className="size-16 text-primary" />
+        <p>{container.isPrivate ? "Private" : "Public"}</p>
+      </CardContent>
+      <CardFooter>
+        <Link href={`/dashboard/${container.slug}`}>View</Link>
+        <Link href={container.resumeUrl}>Open</Link>
+      </CardFooter>
+    </Card>
+  );
+}
+
 function CreateContainerCard() {
   return (
     <Dialog>
-      <DialogTrigger>
+      <DialogTrigger asChild>
         <Card className="w-full max-w-xs  h-96 flex justify-center bg-accent items-center ">
           <CardContent>
             <PackagePlus className="size-16 text-primary" />
