@@ -96,12 +96,12 @@ export function SignUpForm() {
           setIsLoading(true);
         },
         onSuccess: async (ctx) => {
-          // setStage({ stage: "email-verification", email: email });
-          // setIsLoading(false);
-          // await authClient.emailOtp.sendVerificationOtp({
-          //   email: email,
-          //   type: "sign-in",
-          // });
+          setStage({ stage: "email-verification", email: email });
+          setIsLoading(false);
+          await authClient.emailOtp.sendVerificationOtp({
+            email: email,
+            type: "sign-in",
+          });
         },
         onError: (ctx) => {
           // display the error messagsendVerificationOtpe

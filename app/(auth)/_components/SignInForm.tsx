@@ -28,7 +28,16 @@ import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
 
 const formSchema = z.object({
-  email: z.email(),
+  email_or_username: z.email({ message: "Invalid email address" }).or(
+    z
+      .string()
+      .min(3, { message: "Username must be at least 3 characters" })
+      .max(50, { message: "Username must be at most 50 characters" })
+      .regex(/^[a-zA-Z0-9_.]+$/, {
+        message:
+          "Username may only contain letters, numbers, underscores, and dots",
+      })
+  ),
   password: z
     .string()
     .min(8, { message: "Password must be at least 8 characters" }),
@@ -52,7 +61,7 @@ export function SignInForm() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "test@test.com",
+      email_or_username: "test@test.com",
       password: "12345678",
       remember_me: true,
     },
@@ -64,42 +73,74 @@ export function SignInForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
 
-    const { email, password, remember_me } = values;
+    const { email_or_username, password, remember_me } = values;
 
-    const { data, error } = await authClient.signIn.email(
-      {
-        email, // user email address
-        password, // user password -> min 8 characters by default
-        callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
-        rememberMe: remember_me || false, //Remember me
-      },
-      {
-        onRequest: (ctx) => {
-          //show loading
-          setIsLoading(true);
+    if (email_or_username.includes("@")) {
+      const email = email_or_username;
+      const { data, error } = await authClient.signIn.email(
+        {
+          email, // user email address
+          password, // user password -> min 8 characters by default
+          callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
+          rememberMe: remember_me || false, //Remember me
         },
-        onSuccess: async (ctx) => {
-          //redirect to the dashboard or sign in page
-        },
+        {
+          onRequest: (ctx) => {
+            //show loading
+            setIsLoading(true);
+          },
+          onSuccess: async (ctx) => {
+            //redirect to the dashboard or sign in page
+          },
 
-        onError: async (ctx) => {
-          setIsLoading(false);
-          console.log("CTX:", ctx);
-          if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
-            console.log("EMAIL_NOT_VERIFIED");
-            await authClient.emailOtp.sendVerificationOtp({
-              email: email,
-              type: "sign-in",
-            });
-            setStage({ stage: "email-verification", email: email });
-          } else {
-            toast.error(ctx.error.message);
-          }
+          onError: async (ctx) => {
+            setIsLoading(false);
+            console.log("CTX:", ctx);
+            if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
+              console.log("EMAIL_NOT_VERIFIED");
+              await authClient.emailOtp.sendVerificationOtp({
+                email: email,
+                type: "sign-in",
+              });
+              setStage({ stage: "email-verification", email });
+            } else {
+              toast.error(ctx.error.message);
+            }
+          },
+        }
+      );
+    } else {
+      const { data, error } = await authClient.signIn.username(
+        {
+          username: email_or_username, // user email address
+          password, // user password -> min 8 characters by default
+          callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
+          rememberMe: remember_me || false, //Remember me
         },
-      },
-    );
+        {
+          onRequest: (ctx) => {
+            //show loading
+            setIsLoading(true);
+          },
+          onSuccess: async (ctx) => {
+            //redirect to the dashboard or sign in page
+          },
 
-    console.log("data:", data, "error:", error);
+          onError: async (ctx) => {
+            setIsLoading(false);
+            console.log("CTX:", ctx);
+            if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
+              console.log("EMAIL_NOT_VERIFIED");
+              toast.error(
+                "Email not verified. Enter your email to receive a verification code."
+              );
+            } else {
+              toast.error(ctx.error.message);
+            }
+          },
+        }
+      );
+    }
   }
 
   if (stage.stage === "email-verification") {
@@ -124,20 +165,20 @@ export function SignInForm() {
             <div className="grid gap-3">
               <FormField
                 control={form.control}
-                name="email"
+                name="email_or_username"
                 render={({ field }) => (
                   <FormItem className="w-full">
-                    <FormLabel>Email *</FormLabel>
+                    <FormLabel>Email or Username *</FormLabel>
                     <FormControl>
                       <Input
-                        type={"email"}
+                        type={"email_or_username"}
                         value={field.value}
                         onChange={(e) => {
                           const val = e.target.value;
                           field.onChange(val);
                         }}
                         required
-                        placeholder="Enter your Email"
+                        placeholder="Enter your Email or Username"
                       />
                     </FormControl>
                     <FormMessage />
@@ -154,7 +195,7 @@ export function SignInForm() {
                     <div className="flex items-center">
                       <FormLabel>Password *</FormLabel>
                       <Link
-                        href={`/forgot-password?email=${form.watch("email")}`}
+                        href={`/forgot-password?email=${form.watch("email_or_username")}`}
                         className="ml-auto text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
