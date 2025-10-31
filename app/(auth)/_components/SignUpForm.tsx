@@ -15,7 +15,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Password } from "@/components/ui/password";
 import { authClient } from "@/lib/auth-client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { OTPForm } from "./OTPForm";
 import { Stage } from "@/types/authTypes";
@@ -56,6 +56,9 @@ const formSchema = z
 export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
+  const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
+    null
+  );
   const lastMethod = authClient.getLastUsedLoginMethod();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -190,6 +193,29 @@ export function SignUpForm() {
                       onChange={(e) => {
                         const val = e.target.value;
                         field.onChange(val);
+                        // clear any pending checks
+                        if (usernameCheckTimeout.current) {
+                          clearTimeout(usernameCheckTimeout.current);
+                        }
+                        // clear previous availability message while typing
+                        form.clearErrors("username");
+                        // only check when input has minimal length
+                        if (!val || val.length < 3) return;
+                        usernameCheckTimeout.current = setTimeout(async () => {
+                          // ensure we check the latest value
+                          const current = form.getValues("username");
+                          if (current !== val) return;
+                          const { data: response } =
+                            await authClient.isUsernameAvailable({
+                              username: current,
+                            });
+                          if (!response?.available) {
+                            form.setError("username", {
+                              type: "manual",
+                              message: "Username is not available",
+                            });
+                          }
+                        }, 300);
                       }}
                       required
                       placeholder="Enter your Username"
