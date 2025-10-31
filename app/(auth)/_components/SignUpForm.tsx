@@ -32,6 +32,14 @@ const formSchema = z
     last_name: z
       .string()
       .min(1, { message: "Name must be at least 1 character" }),
+    username: z
+      .string()
+      .min(3, { message: "Username must be at least 3 characters" })
+      .max(50, { message: "Username must be at most 50 characters" })
+      .regex(/^[a-zA-Z0-9_.]+$/, {
+        message:
+          "Username may only contain letters, numbers, underscores, and dots",
+      }),
     email: z.email(),
     password: z
       .string()
@@ -55,6 +63,7 @@ export function SignUpForm() {
     defaultValues: {
       first_name: "test",
       last_name: "user",
+      username: "testuser",
       email: "test@test.com",
       password: "12345678",
       confirm_password: "12345678",
@@ -67,7 +76,7 @@ export function SignUpForm() {
     // ✅ This will be type-safe and validated.
     console.log(values);
 
-    const { email, password, first_name, last_name } = values;
+    const { email, password, first_name, last_name, username } = values;
     const { data, error } = await authClient.signUp.email(
       {
         email, // user email address
@@ -75,6 +84,7 @@ export function SignUpForm() {
         name: `${first_name} ${last_name}`,
         first_name,
         last_name,
+        username,
         callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
       },
       {
@@ -83,19 +93,19 @@ export function SignUpForm() {
           setIsLoading(true);
         },
         onSuccess: async (ctx) => {
-          setStage({ stage: "email-verification", email: email });
-          setIsLoading(false);
-          await authClient.emailOtp.sendVerificationOtp({
-            email: email,
-            type: "sign-in",
-          });
+          // setStage({ stage: "email-verification", email: email });
+          // setIsLoading(false);
+          // await authClient.emailOtp.sendVerificationOtp({
+          //   email: email,
+          //   type: "sign-in",
+          // });
         },
         onError: (ctx) => {
           // display the error messagsendVerificationOtpe
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
-      },
+      }
     );
 
     console.log("data:", data, "error:", error);
@@ -166,6 +176,29 @@ export function SignUpForm() {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="username"
+              render={({ field }) => (
+                <FormItem className="w-full">
+                  <FormLabel>Username *</FormLabel>
+                  <FormControl>
+                    <Input
+                      type={"text"}
+                      value={field.value}
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        field.onChange(val);
+                      }}
+                      required
+                      placeholder="Enter your Username"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

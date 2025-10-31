@@ -4,7 +4,7 @@ import { db } from "@/db/drizzle";
 import { nextCookies } from "better-auth/next-js";
 import { authSchema } from "@/db/schemas";
 import { emailOTP } from "better-auth/plugins/email-otp";
-import { lastLoginMethod } from "better-auth/plugins";
+import { lastLoginMethod, username } from "better-auth/plugins";
 import { sendEmail } from "@/actions/sendEmail";
 
 export const auth = betterAuth({
@@ -98,6 +98,7 @@ export const auth = betterAuth({
         }
       },
     }),
+    username(),
     lastLoginMethod(),
     nextCookies(),
   ], // make sure this is the last plugin in the array
