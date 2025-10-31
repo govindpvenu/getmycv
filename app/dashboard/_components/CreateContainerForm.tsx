@@ -56,9 +56,12 @@ export function CreateContainerForm() {
       });
 
       console.log("newBlob:", newBlob);
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("error:", error);
-      console.log("error:", error?.message);
+      console.log(
+        "error:",
+        error instanceof Error ? error.message : "Unknown error",
+      );
       toast.error("Failed to create container");
     } finally {
       form.reset();

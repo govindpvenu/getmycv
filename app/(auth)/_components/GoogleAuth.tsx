@@ -26,7 +26,7 @@ export function GoogleAuth({ lastMethod }: { lastMethod: string | null }) {
           console.log("ctx:", ctx);
           toast.error(ctx.error.message ?? "Something went wrong.");
         },
-      }
+      },
     );
     setPendingGoogle(false);
   }

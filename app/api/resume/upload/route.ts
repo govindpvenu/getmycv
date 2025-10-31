@@ -101,13 +101,16 @@ export async function POST(request: Request): Promise<NextResponse> {
 
     console.log("jsonResponse:", jsonResponse);
     return NextResponse.json(jsonResponse);
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("error:", error);
-    console.log("error:", error?.message);
+    console.log(
+      "error:",
+      error instanceof Error ? error.message : "Unknown error",
+    );
 
     return NextResponse.json(
-      { error: error?.message },
-      { status: 400 } // The webhook will retry 5 times waiting for a 200
+      { error: error instanceof Error ? error.message : "Unknown error" },
+      { status: 400 }, // The webhook will retry 5 times waiting for a 200
     );
   }
 }

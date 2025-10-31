@@ -55,7 +55,7 @@ export default function ForgotPasswordForm({ email }: { email: string }) {
           setIsLoading(false);
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
 
     console.log("data:", data, "error:", error);

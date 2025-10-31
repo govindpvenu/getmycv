@@ -7,7 +7,9 @@
     "build": "next build --webpack",
     "build:turbopack": "next build --turbopack",
     "start": "next start",
+    "format": "prettier . --write",
     "lint": "eslint",
+    "lint:fix": "eslint --fix",
     "reset": "rm -rf .next node_modules/.cache"
   },
   "dependencies": {

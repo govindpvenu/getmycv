@@ -71,7 +71,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
           setIsLoading(false);
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
 
     console.log("data:", data, "error:", error);

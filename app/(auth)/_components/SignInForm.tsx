@@ -96,7 +96,7 @@ export function SignInForm() {
             toast.error(ctx.error.message);
           }
         },
-      }
+      },
     );
 
     console.log("data:", data, "error:", error);

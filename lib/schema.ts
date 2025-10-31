@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-export interface ActionResponse<T = any> {
+export interface ActionResponse<T = unknown> {
   success: boolean;
   message: string;
   errors?: {

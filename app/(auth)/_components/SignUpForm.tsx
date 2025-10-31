@@ -95,7 +95,7 @@ export function SignUpForm() {
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
-      }
+      },
     );
 
     console.log("data:", data, "error:", error);
