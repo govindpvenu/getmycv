@@ -69,7 +69,6 @@ export const auth = betterAuth({
         return {
           first_name: profile.given_name,
           last_name: profile.family_name,
-          username: "govindpvenu",
         };
       },
     },
@@ -77,6 +76,12 @@ export const auth = betterAuth({
   account: {
     accountLinking: {
       enabled: true,
+    },
+  },
+  session: {
+    cookieCache: {
+      enabled: true,
+      maxAge: 5 * 60, // Cache duration in seconds
     },
   },
   plugins: [
