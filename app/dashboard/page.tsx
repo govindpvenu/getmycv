@@ -33,6 +33,10 @@ export default async function DashboardPage() {
   });
 
   if (!session) redirect("/sign-in");
+
+  const username = session?.user.username;
+  if (!username) redirect("/profile");
+
   const containers = await db
     .select()
     .from(container)
@@ -42,24 +46,40 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-1">
       <div className="flex h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
-        <ContainerList containers={containers} />
+        <ContainerList username={username} containers={containers} />
       </div>
     </div>
   );
 }
 
-function ContainerList({ containers }: { containers: containerType[] }) {
+function ContainerList({
+  username,
+  containers,
+}: {
+  username: string;
+  containers: containerType[];
+}) {
   return (
     <div className="flex flex-row gap-4 border flex-wrap overflow-y-auto">
       <CreateContainerCard />
       {containers.map((container) => (
-        <ContainerCard key={container.id} container={container} />
+        <ContainerCard
+          key={container.id}
+          username={username}
+          container={container}
+        />
       ))}
     </div>
   );
 }
 
-function ContainerCard({ container }: { container: containerType }) {
+function ContainerCard({
+  username,
+  container,
+}: {
+  username: string;
+  container: containerType;
+}) {
   return (
     <Card className="w-full max-w-xs  h-96 flex justify-center bg-accent items-center ">
       <CardHeader>
@@ -70,7 +90,7 @@ function ContainerCard({ container }: { container: containerType }) {
         <p>{container.isPrivate ? "Private" : "Public"}</p>
       </CardContent>
       <CardFooter>
-        <Link href={`/dashboard/${container.slug}`}>View</Link>
+        <Link href={`/${username}/${container.slug}`}>View</Link>
         <Link href={container.resumeUrl}>Open</Link>
       </CardFooter>
     </Card>

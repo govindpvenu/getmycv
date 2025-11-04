@@ -1,6 +1,7 @@
 import { db } from "@/db/drizzle";
-import { container } from "@/db/schemas";
-import { eq } from "drizzle-orm";
+import { container, user } from "@/db/schemas";
+import { and, eq } from "drizzle-orm";
+import { notFound } from "next/navigation";
 
 export default async function ResumePage({
   params,
@@ -9,11 +10,28 @@ export default async function ResumePage({
 }) {
   const { username, slug } = await params;
   console.log("username:", username);
+  console.log("slug:", slug);
 
-  const containerData = await db.query.container.findFirst({
-    where: eq(container.slug, slug),
-  });
+  const row = await db
+    .select({
+      id: container.id,
+      title: container.title,
+      slug: container.slug,
+      isPrivate: container.isPrivate,
+      resumeUrl: container.resumeUrl,
+      userId: container.userId,
+    })
+    .from(container)
+    .innerJoin(user, eq(user.id, container.userId))
+    .where(and(eq(user.username, username), eq(container.slug, slug)))
+    .limit(1);
+  console.log("row:", row);
+
+  const containerData = row[0];
   console.log("containeData::", containerData);
+
+  if (!containerData) notFound();
+
   if (containerData?.isPrivate) {
     return <div>Resume is private</div>;
   }
