@@ -12,6 +12,6 @@ export interface ActionResponse<T = unknown> {
 export const containerSchema = z.object({
   title: z.string().min(1, "This field is required"),
   slug: z.string().min(1, "This field is required"),
-  is_private: z.literal(true, { error: "This field is required" }),
+  is_private: z.boolean().default(true).nonoptional("This field is required"),
   resume: z.file().mime("application/pdf").max(10485760),
 });

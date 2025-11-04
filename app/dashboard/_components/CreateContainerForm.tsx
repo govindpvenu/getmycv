@@ -3,8 +3,6 @@ import * as z from "zod";
 import { containerSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Controller, useForm } from "react-hook-form";
-import { motion } from "motion/react";
-import { Check } from "lucide-react";
 import {
   Field,
   FieldGroup,
@@ -60,9 +58,11 @@ export function CreateContainerForm() {
       console.error("error:", error);
       console.log(
         "error:",
-        error instanceof Error ? error.message : "Unknown error",
+        error instanceof Error ? error.message : "Unknown error"
       );
-      toast.error("Failed to create container");
+      toast.error(
+        `Failed to create container: ${error instanceof Error ? error.message : "Unknown error"}`
+      );
     } finally {
       form.reset();
     }

@@ -3,10 +3,9 @@ import { container } from "@/db/schemas";
 import { auth } from "@/lib/auth";
 import { containerSchema } from "@/lib/schema";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
-import { z } from "zod";
 
 const containerApiSchema = containerSchema.omit({ resume: true });
 
@@ -45,14 +44,20 @@ export async function POST(request: Request): Promise<NextResponse> {
           throw new Error("Invalid payload");
         }
 
-        //⚠️ Check if slug is already in exist
-        const slug = await db
+        // ⚠️ Check if slug already exists for this user
+        const existingSlugForUser = await db
           .select()
           .from(container)
-          .where(eq(container.slug, payload.slug));
-        console.log("slug:", slug);
-        if (slug.length > 0) {
-          throw new Error("Slug already exists");
+          .where(
+            and(
+              eq(container.slug, payload.slug),
+              eq(container.userId, session.user.id)
+            )
+          );
+
+        console.log("existingSlugForUser:", existingSlugForUser);
+        if (existingSlugForUser.length > 0) {
+          throw new Error("Slug already exists for this user");
         }
 
         return {
@@ -105,12 +110,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     console.error("error:", error);
     console.log(
       "error:",
-      error instanceof Error ? error.message : "Unknown error",
+      error instanceof Error ? error.message : "Unknown error"
     );
 
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 400 }, // The webhook will retry 5 times waiting for a 200
+      { status: 400 } // The webhook will retry 5 times waiting for a 200
     );
   }
 }
