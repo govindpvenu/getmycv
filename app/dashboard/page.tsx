@@ -35,7 +35,8 @@ export default async function DashboardPage() {
   if (!session) redirect("/sign-in");
 
   const username = session?.user.username;
-  if (!username) redirect("/profile");
+  console.log("username:", username);
+  if (!username) redirect("/dashboard/settings#profile");
 
   const containers = await db
     .select()

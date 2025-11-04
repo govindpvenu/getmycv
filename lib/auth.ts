@@ -56,7 +56,7 @@ export const auth = betterAuth({
         return {
           first_name: profile.name.split(" ")[0],
           last_name: profile.name.split(" ")[1],
-          username: profile.login,
+          // username: profile.login,
         };
       },
     },
