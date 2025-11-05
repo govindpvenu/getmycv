@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeftIcon,
+  CircleFadingArrowUp,
   CircleUserRoundIcon,
   XIcon,
   ZoomInIcon,
@@ -46,7 +47,7 @@ async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Area,
   outputWidth: number = pixelCrop.width, // Optional: specify output size
-  outputHeight: number = pixelCrop.height,
+  outputHeight: number = pixelCrop.height
 ): Promise<Blob | null> {
   try {
     const image = await createImage(imageSrc);
@@ -71,7 +72,7 @@ async function getCroppedImg(
       0,
       0,
       outputWidth, // Draw onto the output size
-      outputHeight,
+      outputHeight
     );
 
     // Convert canvas to blob
@@ -211,7 +212,7 @@ export default function ChangeAvatar({ image }: { image: string | null }) {
       <div className="relative inline-flex">
         {/* Drop area - uses finalImageUrl */}
         <button
-          className="border-input hover:bg-accent/50 data-[dragging=true]:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 relative flex size-16 items-center justify-center overflow-hidden rounded-full border border-dashed transition-colors outline-none focus-visible:ring-[3px] has-disabled:pointer-events-none has-disabled:opacity-50 has-[img]:border-none"
+          className="border-input hover:bg-accent/50 data-[dragging=true]:bg-accent/50 focus-visible:border-ring focus-visible:ring-ring/50 relative flex size-20 items-center justify-center overflow-hidden rounded-full border border-dashed transition-colors outline-none focus-visible:ring-[3px] has-disabled:pointer-events-none has-disabled:opacity-50 has-[img]:border-none"
           onClick={openFileDialog}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
@@ -225,13 +226,13 @@ export default function ChangeAvatar({ image }: { image: string | null }) {
               className="size-full object-cover"
               src={finalImageUrl}
               alt="User avatar"
-              width={64}
-              height={64}
+              width={80}
+              height={80}
               style={{ objectFit: "cover" }}
             />
           ) : (
             <div aria-hidden="true">
-              <CircleUserRoundIcon className="size-4 opacity-60" />
+              <CircleFadingArrowUp className="size-8 opacity-60" />
             </div>
           )}
         </button>
