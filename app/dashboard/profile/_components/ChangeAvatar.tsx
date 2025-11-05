@@ -47,7 +47,7 @@ async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Area,
   outputWidth: number = pixelCrop.width, // Optional: specify output size
-  outputHeight: number = pixelCrop.height
+  outputHeight: number = pixelCrop.height,
 ): Promise<Blob | null> {
   try {
     const image = await createImage(imageSrc);
@@ -72,7 +72,7 @@ async function getCroppedImg(
       0,
       0,
       outputWidth, // Draw onto the output size
-      outputHeight
+      outputHeight,
     );
 
     // Convert canvas to blob

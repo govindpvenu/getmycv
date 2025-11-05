@@ -36,7 +36,7 @@ const formSchema = z.object({
       .regex(/^[a-zA-Z0-9_.]+$/, {
         message:
           "Username may only contain letters, numbers, underscores, and dots",
-      })
+      }),
   ),
   password: z
     .string()
@@ -107,7 +107,7 @@ export function SignInForm() {
               toast.error(ctx.error.message);
             }
           },
-        }
+        },
       );
     } else {
       const { data, error } = await authClient.signIn.username(
@@ -132,13 +132,13 @@ export function SignInForm() {
             if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
               console.log("EMAIL_NOT_VERIFIED");
               toast.error(
-                "Email not verified. Enter your email to receive a verification code."
+                "Email not verified. Enter your email to receive a verification code.",
               );
             } else {
               toast.error(ctx.error.message);
             }
           },
-        }
+        },
       );
     }
   }

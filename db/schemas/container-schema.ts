@@ -27,7 +27,7 @@ export const container = pgTable(
   (t) => [
     // ensure each user can reuse slugs, but not duplicate their own
     uniqueIndex("container_user_slug_unique").on(t.userId, t.slug),
-  ]
+  ],
 );
 
 export * as containerSchema from "./container-schema";
