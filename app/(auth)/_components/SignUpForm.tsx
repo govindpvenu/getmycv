@@ -57,7 +57,7 @@ export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
+    null
   );
   const lastMethod = authClient.getLastUsedLoginMethod();
   // 1. Define your form.
@@ -66,7 +66,7 @@ export function SignUpForm() {
     defaultValues: {
       first_name: "test",
       last_name: "user",
-      username: "testuser",
+      username: "govind",
       email: "test@test.com",
       password: "12345678",
       confirm_password: "12345678",
@@ -108,7 +108,7 @@ export function SignUpForm() {
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
-      },
+      }
     );
 
     console.log("data:", data, "error:", error);
@@ -190,6 +190,46 @@ export function SignUpForm() {
                     <Input
                       type={"text"}
                       value={field.value}
+                      onChange={(e) => {
+                        const val = e.target.value;
+
+                        field.onChange(val);
+
+                        // clear any pending checks
+
+                        if (usernameCheckTimeout.current) {
+                          clearTimeout(usernameCheckTimeout.current);
+                        }
+
+                        // clear previous availability message while typing
+
+                        form.clearErrors("username");
+
+                        // only check when input has minimal length
+
+                        if (!val || val.length < 3) return;
+
+                        usernameCheckTimeout.current = setTimeout(async () => {
+                          // ensure we check the latest value
+
+                          const current = form.getValues("username");
+
+                          if (current !== val) return;
+
+                          const { data: response } =
+                            await authClient.isUsernameAvailable({
+                              username: current,
+                            });
+
+                          if (!response?.available) {
+                            form.setError("username", {
+                              type: "manual",
+
+                              message: "Username is not available",
+                            });
+                          }
+                        }, 300);
+                      }}
                       required
                       placeholder="Enter your Username"
                     />
