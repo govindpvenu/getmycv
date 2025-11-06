@@ -17,15 +17,15 @@
     "@neondatabase/serverless": "^1.0.2",
     "@origin-space/image-cropper": "^0.1.9",
     "@radix-ui/react-alert-dialog": "^1.1.15",
-    "@radix-ui/react-avatar": "^1.1.10",
+    "@radix-ui/react-avatar": "^1.1.11",
     "@radix-ui/react-checkbox": "^1.3.3",
     "@radix-ui/react-dialog": "^1.1.15",
-    "@radix-ui/react-label": "^2.1.7",
+    "@radix-ui/react-label": "^2.1.8",
     "@radix-ui/react-radio-group": "^1.3.8",
     "@radix-ui/react-scroll-area": "^1.2.10",
-    "@radix-ui/react-separator": "^1.1.7",
+    "@radix-ui/react-separator": "^1.1.8",
     "@radix-ui/react-slider": "^1.3.6",
-    "@radix-ui/react-slot": "^1.2.3",
+    "@radix-ui/react-slot": "^1.2.4",
     "@radix-ui/react-switch": "^1.2.6",
     "@radix-ui/react-toggle": "^1.1.10",
     "@vercel/blob": "^2.0.0",
@@ -45,8 +45,8 @@
     "radix-ui": "^1.4.3",
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "react-hook-form": "^7.65.0",
-    "resend": "^6.3.0",
+    "react-hook-form": "^7.66.0",
+    "resend": "^6.4.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.3.1",
     "zod": "^4.1.12"
@@ -59,7 +59,7 @@
     "@types/react-dom": "19.2.2",
     "babel-plugin-react-compiler": "1.0.0",
     "drizzle-kit": "^0.31.6",
-    "eslint": "^9.38.0",
+    "eslint": "^9.39.1",
     "eslint-config-next": "16.0.1",
     "tailwindcss": "^4.1.16",
     "tw-animate-css": "^1.4.0",
@@ -71,6 +71,7 @@
       "@types/react-dom": "19.2.2"
     },
     "onlyBuiltDependencies": [
+      "esbuild",
       "unrs-resolver"
     ]
   }

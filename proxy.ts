@@ -7,6 +7,7 @@ const authRoutes = [
   "/sign-up",
   "/forgot-password",
   "/reset-password",
+  "/",
 ];
 
 export async function proxy(request: NextRequest) {
@@ -19,7 +20,7 @@ export async function proxy(request: NextRequest) {
 
   if (isAuthRoute) {
     if (session) {
-      return NextResponse.redirect(new URL("/", request.url));
+      return NextResponse.redirect(new URL("/dashboard", request.url));
     }
     return NextResponse.next();
   }
