@@ -45,8 +45,8 @@ export default async function DashboardPage() {
   console.log("containers: ", containers);
 
   return (
-    <div className="flex flex-1">
-      <div className="flex  h-full w-full flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white p-2 md:p-10 dark:border-neutral-700 dark:bg-neutral-900">
+    <div className="flex flex-1 ">
+      <div className="flex  h-full w-full  flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white  dark:border-neutral-700 dark:bg-neutral-900">
         <ContainerList username={username} containers={containers} />
       </div>
     </div>
@@ -61,7 +61,7 @@ function ContainerList({
   containers: containerType[];
 }) {
   return (
-    <div className="flex flex-row gap-4 border flex-wrap overflow-y-auto">
+    <div className="flex flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
       <CreateContainerCard />
       {containers.map((container) => (
         <ContainerCard

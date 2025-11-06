@@ -15,7 +15,7 @@ export default async function DashboardLayout({
   return (
     <div
       className={
-        "mx-auto h-screen flex w-full  flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800"
+        "mx-auto sm:h-screen h-full flex w-full  flex-1 flex-col overflow-hidden rounded-md border border-neutral-200 bg-gray-100 md:flex-row dark:border-neutral-700 dark:bg-neutral-800"
       }
     >
       <SidebarMain user={session.user} />
