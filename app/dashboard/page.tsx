@@ -4,7 +4,13 @@ import { redirect } from "next/navigation";
 import { db } from "@/db/drizzle";
 import { container, containerSchema } from "@/db/schemas";
 import { eq } from "drizzle-orm";
-import { FileBox, PackagePlus } from "lucide-react";
+import {
+  Earth,
+  FileBox,
+  LockKeyhole,
+  MoreVertical,
+  PackagePlus,
+} from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -26,6 +32,9 @@ import {
 } from "@/components/ui/card";
 import { containerType } from "@/types/containerTypes";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { getRelativeTime } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -61,8 +70,9 @@ function ContainerList({
   containers: containerType[];
 }) {
   return (
-    <div className="flex flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
+    <div className="flex  flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
       <CreateContainerCard />
+
       {containers.map((container) => (
         <ContainerCard
           key={container.id}
@@ -82,17 +92,48 @@ function ContainerCard({
   container: containerType;
 }) {
   return (
-    <Card className="w-full max-w-xs  h-96 flex justify-center bg-accent items-center ">
-      <CardHeader>
-        <CardTitle>{container.title}</CardTitle>
+    <Card className="w-full max-w-xs h-96 py-2 flex bg-accent items-center justify-between hover:border-primary transition-all duration-300 group">
+      <CardHeader className="w-full px-4  flex flex-col justify-between items-start">
+        <CardTitle className=" text-lg font-bold text-primary">
+          {container.title}
+        </CardTitle>
+        <CardDescription className="flex w-full items-center justify-between ">
+          <span className="text-xs text-muted-foreground">
+            Last updated {getRelativeTime(container.updatedAt)}
+          </span>
+          <div className="flex items-center justify-end gap-2  ">
+            {container.isPrivate ? (
+              <Badge variant="secondary" className="border-primary/80">
+                <LockKeyhole className="size-2 text-primary" />
+                <span className="text-xs">Private</span>
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="border-primary/80">
+                <Earth className="size-2 text-primary " />
+                <span className="text-xs">Public</span>
+              </Badge>
+            )}
+          </div>
+        </CardDescription>
       </CardHeader>
       <CardContent>
-        <FileBox className="size-16 text-primary" />
-        <p>{container.isPrivate ? "Private" : "Public"}</p>
+        <FileBox className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
       </CardContent>
-      <CardFooter>
-        <Link href={`/${username}/${container.slug}`}>View</Link>
-        <Link href={container.resumeUrl}>Open</Link>
+      {/* <Link href={`/${username}/${container.slug}`}>View</Link>
+      <Link href={container.resumeUrl}>Open</Link> */}
+      <CardFooter className="flex w-full justify-between items-center px-4">
+        <Button size="sm" className="flex-1 mr-1">
+          Preview
+        </Button>
+        <Button variant="secondary" size="sm" className="flex-1 mx-1">
+          Open
+        </Button>
+        <Button variant="outline" size="sm" className="flex-1 mx-1">
+          Share
+        </Button>
+        <Button variant="default" size="icon" className="ml-1">
+          <MoreVertical className="size-5" />
+        </Button>
       </CardFooter>
     </Card>
   );
@@ -102,9 +143,9 @@ function CreateContainerCard() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card className="w-full max-w-xs  h-96 flex justify-center bg-accent items-center ">
+        <Card className="w-full max-w-xs   hover:border-primary transition-all duration-300 group h-96 flex justify-center bg-accent items-center ">
           <CardContent>
-            <PackagePlus className="size-16 text-primary" />
+            <PackagePlus className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
           </CardContent>
         </Card>
       </DialogTrigger>
