@@ -5,6 +5,7 @@ import { db } from "@/db/drizzle";
 import { container, containerSchema } from "@/db/schemas";
 import { eq } from "drizzle-orm";
 import {
+  ChartArea,
   Download,
   Earth,
   FileBox,
@@ -41,6 +42,17 @@ import { Button } from "@/components/ui/button";
 import { getRelativeTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import ShareButton from "./_components/ShareButton";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import { PartialLineChart } from "@/components/evil-charts/PartialLineChart";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -154,11 +166,39 @@ function ContainerCard({
         <Button variant="destructive" size="sm">
           <Trash2 size={16} aria-hidden="true" />
         </Button>
-        <Button variant="secondary" size="sm">
-          <Info size={16} aria-hidden="true" />
-        </Button>
+        <ContainerStatsDrawer />
       </CardFooter>
     </Card>
+  );
+}
+
+function ContainerStatsDrawer() {
+  return (
+    <Drawer>
+      <DrawerTrigger asChild>
+        <Button variant="secondary" size="sm">
+          <ChartArea className="text-white" size={16} aria-hidden="true" />
+        </Button>
+      </DrawerTrigger>
+      <DrawerContent>
+        <DrawerHeader>
+          <DrawerTitle>Container Statistics</DrawerTitle>
+          <DrawerDescription>
+            Total views and downloads of your resume by year.
+          </DrawerDescription>
+        </DrawerHeader>
+        <div className="flex justify-center items-center">
+          <div className="max-w-xl  w-full">
+            <PartialLineChart />
+          </div>
+        </div>
+        <DrawerFooter>
+          <DrawerClose asChild>
+            <Button variant="outline">Close</Button>
+          </DrawerClose>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
   );
 }
 
