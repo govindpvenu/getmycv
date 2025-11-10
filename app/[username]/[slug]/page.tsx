@@ -1,11 +1,12 @@
 import CopyButton from "@/app/dashboard/_components/CopyButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
+import ViewTracker from "./ViewTracker";
 import { db } from "@/db/drizzle";
 import { container, user } from "@/db/schemas";
 import { and, eq } from "drizzle-orm";
 import { Download } from "lucide-react";
-import Link from "next/link";
+import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 
 export default async function ResumePage({
@@ -33,15 +34,20 @@ export default async function ResumePage({
   console.log("row:", row);
 
   const containerData = row[0];
-  console.log("containeData::", containerData);
 
   if (!containerData) notFound();
 
   if (containerData?.isPrivate) {
     return <div>Resume is private</div>;
   }
+
+  const cookieStore = await cookies();
+  const viewKey = `viewed_${containerData.id}`;
+  const hasViewed = cookieStore.get(viewKey)?.value === "1";
+
   return (
     <main className="flex h-dvh w-full justify-center items-center  rounded  sm:mx-auto sm:my-16 ">
+      <ViewTracker containerId={containerData.id} hasViewed={hasViewed} />
       <iframe
         src={`${containerData.resumeUrl}#toolbar=0&navpanes=0&scrollbar=1&view=FitH`}
         title="Resume"
@@ -53,15 +59,14 @@ export default async function ResumePage({
             text={`${process.env.NEXT_PUBLIC_BASE_URL}/${username}/${slug}`}
           />
           <a
-            href={`${containerData.resumeUrl}?download=1`}
+            href={`/api/containers/${containerData.id}/download`}
             target="_blank"
             download={`${containerData.title}.pdf`}
-            rel="noopener noreferrer"
           >
             <Button
               size="icon"
-              className="hover:bg-muted size-9  rounded-full"
               variant="outline"
+              className="size-9 rounded-full"
             >
               <Download size={20} />
             </Button>

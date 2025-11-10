@@ -4,6 +4,7 @@ import {
   pgTable,
   timestamp,
   uniqueIndex,
+  integer,
 } from "drizzle-orm/pg-core";
 import { user } from "./auth-schema";
 
@@ -18,6 +19,8 @@ export const container = pgTable(
     slug: text("slug").notNull(),
     isPrivate: boolean("is_private").default(false).notNull(),
     resumeUrl: text("resume_url").notNull(),
+    views: integer("views").notNull().default(0),
+    downloads: integer("downloads").notNull().default(0),
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at")
       .$onUpdate(() => /* @__PURE__ */ new Date())
