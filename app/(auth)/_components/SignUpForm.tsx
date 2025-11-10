@@ -57,7 +57,7 @@ export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null
+    null,
   );
   const lastMethod = authClient.getLastUsedLoginMethod();
   // 1. Define your form.
@@ -108,7 +108,7 @@ export function SignUpForm() {
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
-      }
+      },
     );
 
     console.log("data:", data, "error:", error);

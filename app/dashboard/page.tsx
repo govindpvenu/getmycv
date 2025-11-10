@@ -5,11 +5,16 @@ import { db } from "@/db/drizzle";
 import { container, containerSchema } from "@/db/schemas";
 import { eq } from "drizzle-orm";
 import {
+  Download,
   Earth,
   FileBox,
+  Info,
   LockKeyhole,
   MoreVertical,
   PackagePlus,
+  Pencil,
+  SquareArrowOutUpRightIcon,
+  Trash2,
 } from "lucide-react";
 import {
   Dialog,
@@ -35,6 +40,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { getRelativeTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
+import ShareButton from "./_components/ShareButton";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -119,20 +125,37 @@ function ContainerCard({
       <CardContent>
         <FileBox className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
       </CardContent>
-      {/* <Link href={`/${username}/${container.slug}`}>View</Link>
-      <Link href={container.resumeUrl}>Open</Link> */}
-      <CardFooter className="flex w-full justify-between items-center px-4">
-        <Button size="sm" className="flex-1 mr-1">
-          Preview
+      <CardFooter className="flex w-full justify-between items-center px-2 ">
+        <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
+          <Button
+            size="sm"
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+          >
+            <Link href={`/${username}/${container.slug}`}>Preview</Link>
+          </Button>
+          <Button
+            className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
+            variant="outline"
+            size="sm"
+            aria-label="Open link"
+          >
+            <Link target="_blank" href={`/${username}/${container.slug}`}>
+              <SquareArrowOutUpRightIcon size={16} aria-hidden="true" />
+            </Link>
+          </Button>
+        </div>
+
+        <ShareButton
+          link={`${process.env.NEXT_PUBLIC_BASE_URL}/${username}/${container.slug}`}
+        />
+        <Button variant="outline" size="sm">
+          <Pencil size={16} aria-hidden="true" />
         </Button>
-        <Button variant="secondary" size="sm" className="flex-1 mx-1">
-          Open
+        <Button variant="destructive" size="sm">
+          <Trash2 size={16} aria-hidden="true" />
         </Button>
-        <Button variant="outline" size="sm" className="flex-1 mx-1">
-          Share
-        </Button>
-        <Button variant="default" size="icon" className="ml-1">
-          <MoreVertical className="size-5" />
+        <Button variant="secondary" size="sm">
+          <Info size={16} aria-hidden="true" />
         </Button>
       </CardFooter>
     </Card>

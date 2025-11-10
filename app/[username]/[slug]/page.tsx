@@ -1,3 +1,4 @@
+import CopyButton from "@/app/dashboard/_components/CopyButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
 import { db } from "@/db/drizzle";
@@ -48,6 +49,9 @@ export default async function ResumePage({
       />
       <div className="fixed bottom-5 right-5 z-0 hidden sm:block print:hidden">
         <div className="flex flex-col items-center gap-y-2">
+          <CopyButton
+            text={`${process.env.NEXT_PUBLIC_BASE_URL}/${username}/${slug}`}
+          />
           <a
             href={`${containerData.resumeUrl}?download=1`}
             target="_blank"
