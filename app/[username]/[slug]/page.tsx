@@ -6,8 +6,9 @@ import { db } from "@/db/drizzle";
 import { container, user } from "@/db/schemas";
 import { and, eq } from "drizzle-orm";
 import { Download } from "lucide-react";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
+import { auth } from "@/lib/auth";
 
 export default async function ResumePage({
   params,
@@ -17,6 +18,11 @@ export default async function ResumePage({
   const { username, slug } = await params;
   console.log("username:", username);
   console.log("slug:", slug);
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
+  const userId = session?.user.id;
 
   const row = await db
     .select({
@@ -37,7 +43,7 @@ export default async function ResumePage({
 
   if (!containerData) notFound();
 
-  if (containerData?.isPrivate) {
+  if (containerData?.isPrivate && containerData?.userId !== userId) {
     return <div>Resume is private</div>;
   }
 
