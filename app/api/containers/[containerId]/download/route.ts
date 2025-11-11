@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { db } from "@/db/drizzle";
-import { container } from "@/db/schemas";
-import { eq, sql } from "drizzle-orm";
+import { container, containerEvent } from "@/db/schemas";
+import { eq } from "drizzle-orm";
 
 export async function GET(
   _req: Request,
@@ -15,7 +15,6 @@ export async function GET(
     .from(container)
     .where(eq(container.id, containerId))
     .limit(1);
-  console.log("row:", row);
 
   if (!row) {
     return NextResponse.json({ error: "Not found" }, { status: 404 });
@@ -26,10 +25,10 @@ export async function GET(
   const alreadyDownloaded = cookieStore.get(dlKey)?.value === "1";
 
   if (!alreadyDownloaded) {
-    await db
-      .update(container)
-      .set({ downloads: sql`${container.downloads} + 1` })
-      .where(eq(container.id, containerId));
+    await db.insert(containerEvent).values({
+      containerId,
+      eventType: "download",
+    });
 
     cookieStore.set(dlKey, "1", {
       httpOnly: true,

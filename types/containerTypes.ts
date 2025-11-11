@@ -8,3 +8,8 @@ export type containerType = {
   createdAt: Date;
   updatedAt: Date;
 };
+export interface MonthlyStats extends Record<string, unknown> {
+  month: string;
+  views: number;
+  downloads: number;
+}

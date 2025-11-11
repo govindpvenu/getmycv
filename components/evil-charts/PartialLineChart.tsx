@@ -2,13 +2,7 @@
 
 import { CartesianGrid, Line, LineChart, XAxis, Customized } from "recharts";
 import { useCallback, useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import {
   ChartConfig,
   ChartContainer,
@@ -17,21 +11,7 @@ import {
 } from "@/components/ui/chart";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp } from "lucide-react";
-
-const chartData = [
-  { month: "January", views: 0, downloads: 0 },
-  { month: "February", views: 0, downloads: 0 },
-  { month: "March", views: 0, downloads: 0 },
-  { month: "April", views: 0, downloads: 0 },
-  { month: "May", views: 0, downloads: 0 },
-  { month: "June", views: 0, downloads: 0 },
-  { month: "July", views: 0, downloads: 0 },
-  { month: "August", views: 0, downloads: 0 },
-  { month: "September", views: 0, downloads: 0 },
-  { month: "October", views: 0, downloads: 0 },
-  { month: "November", views: 0, downloads: 1 },
-  { month: "December", views: 1, downloads: 0 },
-];
+import { MonthlyStats } from "@/types/containerTypes";
 
 const chartConfig = {
   views: {
@@ -44,7 +24,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig;
 
-export function PartialLineChart() {
+export function PartialLineChart({ chartData }: { chartData: MonthlyStats[] }) {
   const [DasharrayCalculator, lineDasharrays] = useDynamicDasharray({
     splitIndex: chartData.length - 2,
   });
@@ -172,7 +152,7 @@ export function useDynamicDasharray({
 
         const lineName = line?.item?.props?.dataKey;
         const lineConfig = lineConfigs?.find(
-          (config) => config?.name === lineName
+          (config) => config?.name === lineName,
         );
         const lineSplitIndex = lineConfig?.splitIndex ?? splitIndex;
         const dashedSegment = points?.slice(lineSplitIndex);
@@ -191,11 +171,11 @@ export function useDynamicDasharray({
           (targetDashPattern?.[0] || 0) + (targetDashPattern?.[1] || 0) || 1;
         const repetitions = Math.ceil(dashedLength / patternSegmentLength);
         const dashedPatternSegments = Array.from({ length: repetitions }, () =>
-          targetDashPattern.join(" ")
+          targetDashPattern.join(" "),
         );
 
         const finalDasharray = `${solidDasharrayPart} ${dashedPatternSegments.join(
-          " "
+          " ",
         )}`;
         newLineDasharrays.push({
           name: lineName!,
@@ -211,7 +191,7 @@ export function useDynamicDasharray({
 
       return null;
     },
-    [splitIndex, curveAdjustment, lineConfigs, dashPattern, lineDasharrays]
+    [splitIndex, curveAdjustment, lineConfigs, dashPattern, lineDasharrays],
   );
 
   return [DasharrayCalculator, lineDasharrays];

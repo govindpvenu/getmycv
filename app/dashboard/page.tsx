@@ -2,7 +2,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/db/drizzle";
-import { container, containerSchema } from "@/db/schemas";
+import { container, containerEvent, containerSchema } from "@/db/schemas";
 import { eq } from "drizzle-orm";
 import {
   ChartArea,
@@ -53,6 +53,9 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 import { PartialLineChart } from "@/components/evil-charts/PartialLineChart";
+import { getContainerMonthlyStats } from "@/db/data";
+import { Suspense } from "react";
+import { Spinner } from "@/components/kibo-ui/spinner";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -166,13 +169,13 @@ function ContainerCard({
         <Button variant="destructive" size="sm">
           <Trash2 size={16} aria-hidden="true" />
         </Button>
-        <ContainerStatsDrawer />
+        <ContainerStatsDrawer containerId={container.id} />
       </CardFooter>
     </Card>
   );
 }
 
-function ContainerStatsDrawer() {
+function ContainerStatsDrawer({ containerId }: { containerId: string }) {
   return (
     <Drawer>
       <DrawerTrigger asChild>
@@ -187,11 +190,16 @@ function ContainerStatsDrawer() {
             Total views and downloads of your resume by year.
           </DrawerDescription>
         </DrawerHeader>
-        <div className="flex justify-center items-center">
-          <div className="max-w-xl  w-full">
-            <PartialLineChart />
+        <Suspense
+          fallback={
+            <Spinner variant="infinite" className="size-10 text-primary" />
+          }
+        >
+          <div className="flex justify-center items-center ">
+            <ContainerStats containerId={containerId} />
           </div>
-        </div>
+        </Suspense>
+
         <DrawerFooter>
           <DrawerClose asChild>
             <Button variant="outline">Close</Button>
@@ -199,6 +207,16 @@ function ContainerStatsDrawer() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
+  );
+}
+
+async function ContainerStats({ containerId }: { containerId: string }) {
+  const chartData = await getContainerMonthlyStats(containerId);
+  // console.log("chartData:", chartData);
+  return (
+    <div className="max-w-xl  w-full">
+      <PartialLineChart chartData={chartData} />
+    </div>
   );
 }
 
