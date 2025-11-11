@@ -58,10 +58,10 @@ export function CreateContainerForm() {
       console.error("error:", error);
       console.log(
         "error:",
-        error instanceof Error ? error.message : "Unknown error",
+        error instanceof Error ? error.message : "Unknown error"
       );
       toast.error(
-        `Failed to create container: ${error instanceof Error ? error.message : "Unknown error"}`,
+        `Failed to create container: ${error instanceof Error ? error.message : "Unknown error"}`
       );
     } finally {
       form.reset();
@@ -168,7 +168,7 @@ export function CreateContainerForm() {
           )}
         />
 
-        <Button type="submit" size="sm">
+        <Button type="submit" size="sm" disabled={form.formState.isSubmitting}>
           {form.formState.isSubmitting ? <Spinner /> : "Create Container"}
         </Button>
       </FieldGroup>

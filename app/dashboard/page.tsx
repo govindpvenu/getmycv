@@ -55,7 +55,8 @@ import {
 import { PartialLineChart } from "@/components/evil-charts/PartialLineChart";
 import { getContainerMonthlyStats } from "@/db/data";
 import { Suspense } from "react";
-import { Spinner } from "@/components/kibo-ui/spinner";
+import DeleteButton from "./_components/DeleteButton";
+import { Spinner } from "@/components/ui/spinner";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -166,9 +167,11 @@ function ContainerCard({
         <Button variant="outline" size="sm">
           <Pencil size={16} aria-hidden="true" />
         </Button>
-        <Button variant="destructive" size="sm">
-          <Trash2 size={16} aria-hidden="true" />
-        </Button>
+        <DeleteButton
+          containerId={container.id}
+          containerSlug={container.slug}
+        />
+
         <ContainerStatsDrawer containerId={container.id} />
       </CardFooter>
     </Card>
@@ -190,11 +193,7 @@ function ContainerStatsDrawer({ containerId }: { containerId: string }) {
             Total views and downloads of your resume by year.
           </DrawerDescription>
         </DrawerHeader>
-        <Suspense
-          fallback={
-            <Spinner variant="infinite" className="size-10 text-primary" />
-          }
-        >
+        <Suspense fallback={<Spinner />}>
           <div className="flex justify-center items-center ">
             <ContainerStats containerId={containerId} />
           </div>

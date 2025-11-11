@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Spinner } from "@/components/ui/spinner";
 
 export function ConfirmLogOut() {
   const [isLoading, setIsLoading] = useState(false);
@@ -25,7 +26,7 @@ export function ConfirmLogOut() {
         setIsLoading(false);
       }}
     >
-      {isLoading ? <Loader className="animate-spin" /> : "Yes"}
+      {isLoading ? <Spinner /> : "Yes"}
     </Button>
   );
 }
