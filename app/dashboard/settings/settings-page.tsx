@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Scrollspy } from "@/components/ui/scrollspy";
+import { Scrollspy } from "@/components/re-ui/scrollspy";
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import Loading from "../loading";

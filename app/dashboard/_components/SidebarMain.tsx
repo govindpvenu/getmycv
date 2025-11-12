@@ -32,7 +32,7 @@ import {
   LogOutIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { HyperText } from "@/components/ui/hyper-text";
+import { HyperText } from "@/components/magic-ui/hyper-text";
 
 const links = [
   {

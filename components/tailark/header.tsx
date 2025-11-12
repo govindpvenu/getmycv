@@ -34,7 +34,7 @@ export const HeroHeader = () => {
         data-state={menuState && "active"}
         className={cn(
           "fixed z-20 w-full border-b transition-colors duration-150",
-          scrolled && "bg-background/50 backdrop-blur-3xl"
+          scrolled && "bg-background/50 backdrop-blur-3xl",
         )}
       >
         <div className="mx-auto max-w-5xl px-6 transition-all duration-300">

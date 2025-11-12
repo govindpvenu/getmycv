@@ -43,7 +43,7 @@ export default function DeleteButton({
       onError: () => {
         toast.error("Failed to delete container");
       },
-    }
+    },
   );
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

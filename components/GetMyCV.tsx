@@ -1,5 +1,5 @@
 import { Boxes } from "lucide-react";
-import { HyperText } from "./ui/hyper-text";
+import { HyperText } from "./magic-ui/hyper-text";
 import Link from "next/link";
 
 export default function GetMyCV() {

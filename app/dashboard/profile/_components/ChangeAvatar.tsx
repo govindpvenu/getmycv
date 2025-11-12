@@ -17,7 +17,7 @@ import {
   CropperCropArea,
   CropperDescription,
   CropperImage,
-} from "@/components/ui/cropper";
+} from "@/components/origin-ui/cropper";
 import {
   Dialog,
   DialogContent,
