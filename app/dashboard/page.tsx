@@ -245,7 +245,7 @@ function CreateContainerCard() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Card className="w-full max-w-xs   hover:border-primary transition-all duration-300 group h-96 flex justify-center bg-accent items-center ">
+        <Card className="w-full max-w-xs border-primary/80 border-dashed   hover:border-primary transition-all duration-300 group h-96 flex justify-center bg-accent items-center ">
           <CardContent>
             <PackagePlus className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
           </CardContent>
