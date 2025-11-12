@@ -1,20 +1,25 @@
 import Image from "next/image";
 import { SignUpForm } from "../_components/SignUpForm";
-import { GalleryVerticalEnd } from "lucide-react";
+import { Boxes, GalleryVerticalEnd } from "lucide-react";
 import Link from "next/link";
 import GetMyCV from "@/components/GetMyCV";
 import ThemeToggle from "@/components/ThemeToggle";
+import Balatro from "@/components/react-bits/Balatro";
 
 export default function SignUpPage() {
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="bg-muted relative hidden lg:block">
-        <Image
-          width={100}
-          height={100}
-          src="/placeholder.svg"
-          alt="Image"
-          className="absolute inset-0 h-full w-full object-cover dark:brightness-[0.2] dark:grayscale"
+      <div className="  hidden lg:block relative">
+        <span className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2  text-2xl font-bold">
+          <Boxes className="size-32 shrink-0 hover:rotate-180   transition-transform duration-1000 text-primary animate-pulse" />
+        </span>
+        <Balatro
+          isRotate={false}
+          mouseInteraction={true}
+          color1="#e78a53"
+          color2="#5f8787"
+          color3="#000000"
+          pixelFilter={2000}
         />
       </div>
       <div className="flex flex-col gap-4 p-6 md:p-10">
