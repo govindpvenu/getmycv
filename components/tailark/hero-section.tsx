@@ -49,9 +49,9 @@ export default function HeroSection() {
                   preset="fade-in-blur"
                   speedSegment={0.3}
                   as="h1"
-                  className="mt-8 max-w-2xl text-balance text-5xl font-medium md:text-6xl lg:mt-16"
+                  className="mt-8 max-w-2xl text-balance text-4xl font-medium md:text-5xl lg:mt-16"
                 >
-                  Build and Ship 10x faster with NS
+                  Manage,Share & Track your CV
                 </TextEffect>
                 <TextEffect
                   per="line"
@@ -59,11 +59,12 @@ export default function HeroSection() {
                   speedSegment={0.3}
                   delay={0.5}
                   as="p"
-                  className="mt-8 max-w-2xl text-pretty text-lg"
+                  className="mt-8 max-w-2xl text-pretty text-base"
                 >
-                  Tailwindcss highly customizable components for building modern
-                  websites and applications that look and feel the way you mean
-                  it.
+                  Begin with a new approach to managing your CVs, each with a
+                  unique shareable link for recruiters.Keep links consistent
+                  even as documents are updated for streamlined sharing and
+                  tracking.
                 </TextEffect>
 
                 <AnimatedGroup
@@ -89,8 +90,8 @@ export default function HeroSection() {
                       size="lg"
                       className="rounded-xl px-5 text-base"
                     >
-                      <Link href="#link">
-                        <span className="text-nowrap">Start Building</span>
+                      <Link href="/sign-up">
+                        <span className="text-nowrap">Get Started</span>
                       </Link>
                     </Button>
                   </div>
@@ -102,7 +103,7 @@ export default function HeroSection() {
                     className="h-10.5 rounded-xl px-5 text-base"
                   >
                     <Link href="#link">
-                      <span className="text-nowrap">Request a demo</span>
+                      <span className="text-nowrap">Learn more</span>
                     </Link>
                   </Button>
                 </AnimatedGroup>
