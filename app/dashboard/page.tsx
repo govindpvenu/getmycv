@@ -57,11 +57,13 @@ import { getContainerMonthlyStats } from "@/db/data";
 import { Suspense } from "react";
 import DeleteButton from "./_components/DeleteButton";
 import { Spinner } from "@/components/ui/spinner";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
+  console.log("session:", session);
 
   if (!session) redirect("/sign-in");
 
@@ -69,28 +71,29 @@ export default async function DashboardPage() {
   console.log("username:", username);
   if (!username) redirect("/dashboard/profile");
 
-  const containers = await db
-    .select()
-    .from(container)
-    .where(eq(container.userId, session.user.id));
-  console.log("containers: ", containers);
-
   return (
     <div className="flex flex-1 ">
       <div className="flex  h-full w-full  flex-1 flex-col gap-2 rounded-tl-2xl border border-neutral-200 bg-white  dark:border-neutral-700 dark:bg-neutral-900">
-        <ContainerList username={username} containers={containers} />
+        <Suspense fallback={<ContainerListSkeleton />}>
+          <ContainerList username={username} userId={session.user.id} />
+        </Suspense>
       </div>
     </div>
   );
 }
 
-function ContainerList({
+async function ContainerList({
   username,
-  containers,
+  userId,
 }: {
   username: string;
-  containers: containerType[];
+  userId: string;
 }) {
+  const containers = await db
+    .select()
+    .from(container)
+    .where(eq(container.userId, userId));
+  console.log("containers: ", containers);
   return (
     <div className="flex  flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
       <CreateContainerCard />
@@ -106,6 +109,25 @@ function ContainerList({
   );
 }
 
+function ContainerListSkeleton({}: {}) {
+  return (
+    <div className="flex  flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
+      <CreateContainerCard />
+
+      <ContainerCardSkeleton />
+      <ContainerCardSkeleton />
+      <ContainerCardSkeleton />
+    </div>
+  );
+}
+
+function ContainerCardSkeleton() {
+  return (
+    <div className="w-full max-w-xs h-96 p-0 flex items-center justify-between hover:border-primary transition-all duration-300 group">
+      <Skeleton className="w-full h-full border" />
+    </div>
+  );
+}
 function ContainerCard({
   username,
   container,

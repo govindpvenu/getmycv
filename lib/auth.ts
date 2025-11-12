@@ -29,7 +29,7 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
     requireEmailVerification: true,
-    sendResetPassword: async ({ user, url, token }, request) => {
+    sendResetPassword: async ({ user, url, token }) => {
       console.log(`user: ${user}, url: ${url}, token: ${token}`);
       await sendEmail({
         email: user.email,
@@ -37,7 +37,7 @@ export const auth = betterAuth({
         text: `Click the link to reset your password: ${url}`,
       });
     },
-    onPasswordReset: async ({ user }, request) => {
+    onPasswordReset: async ({ user }) => {
       console.log(`Password for user ${user.email} has been reset.`);
       // Notify user
       await sendEmail({
