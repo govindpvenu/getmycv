@@ -307,8 +307,8 @@ export function SignUpForm() {
                 Or continue with
               </span>
             </div>
-            <GitHubAuth lastMethod={lastMethod} />
-            <GoogleAuth lastMethod={lastMethod} />
+            <GitHubAuth />
+            <GoogleAuth />
           </div>
 
           <div className="text-center text-sm">
