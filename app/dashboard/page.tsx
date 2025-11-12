@@ -109,7 +109,7 @@ async function ContainerList({
   );
 }
 
-function ContainerListSkeleton({}: {}) {
+function ContainerListSkeleton() {
   return (
     <div className="flex  flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
       <CreateContainerCard />
