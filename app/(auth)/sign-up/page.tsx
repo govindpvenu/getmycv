@@ -4,7 +4,13 @@ import GetMyCV from "@/components/GetMyCV";
 import ThemeToggle from "@/components/ThemeToggle";
 import Balatro from "@/components/react-bits/Balatro";
 
-export default function SignUpPage() {
+export default async function SignUpPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ [key: string]: string | undefined }>;
+}) {
+  const email = (await searchParams).email || "";
+
   return (
     <div className="grid min-h-svh lg:grid-cols-2">
       <div className="  hidden lg:block relative">
@@ -27,7 +33,7 @@ export default function SignUpPage() {
         </div>
         <div className="flex flex-1 items-center justify-center">
           <div className="w-full max-w-xs">
-            <SignUpForm />
+            <SignUpForm email={email} />
           </div>
         </div>
       </div>

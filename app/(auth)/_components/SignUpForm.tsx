@@ -53,13 +53,12 @@ const formSchema = z
     path: ["confirm_password"], // 👈 error will show up at confirm_password field
   });
 
-export function SignUpForm() {
+export function SignUpForm({ email }: { email: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null
   );
-  const lastMethod = authClient.getLastUsedLoginMethod();
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -67,7 +66,7 @@ export function SignUpForm() {
       first_name: "test",
       last_name: "user",
       username: "govind",
-      email: "test@test.com",
+      email: email || "test@test.com",
       password: "12345678",
       confirm_password: "12345678",
     },

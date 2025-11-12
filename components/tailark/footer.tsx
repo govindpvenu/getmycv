@@ -30,7 +30,7 @@ const links = [
 
 export default function FooterSection() {
   return (
-    <footer className="py-16 md:py-32">
+    <footer className="py-8 md:py-16">
       <div className="mx-auto max-w-5xl px-6">
         <div className="flex justify-center w-full">
           <GetMyCV />
@@ -49,7 +49,7 @@ export default function FooterSection() {
 
         <span className="text-muted-foreground block text-center text-sm">
           {" "}
-          © {new Date().getFullYear()} Tailark, All rights reserved
+          © {new Date().getFullYear()} GetMyCV, All rights reserved
         </span>
       </div>
     </footer>
