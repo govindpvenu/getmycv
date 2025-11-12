@@ -1,13 +1,11 @@
 "use client";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Upload, UserPen } from "lucide-react";
+import { UserPen } from "lucide-react";
 import ChangeAvatar from "./ChangeAvatar";
 import { Session } from "@/lib/auth-client";
 import { Badge } from "@/components/ui/badge";
-import { Camera, Calendar, Mail, MapPin } from "lucide-react";
+import { Calendar, Mail } from "lucide-react";
 import { getRelativeTime } from "@/lib/utils";
 
 export default function ProfileHeader({ user }: { user: Session["user"] }) {

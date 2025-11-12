@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { CheckIcon, CopyIcon, Share2 } from "lucide-react";
 

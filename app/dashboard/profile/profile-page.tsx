@@ -11,7 +11,6 @@ export default function ProfilePage() {
     data: session,
     isPending, //loading state
     error, //error object
-    refetch, //refetch the session
   } = authClient.useSession();
   console.log("session:", session);
   if (isPending) {

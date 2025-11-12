@@ -2,26 +2,21 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { db } from "@/db/drizzle";
-import { container, containerEvent, containerSchema } from "@/db/schemas";
+import { container } from "@/db/schemas";
 import { eq } from "drizzle-orm";
 import {
   ChartArea,
-  Download,
   Earth,
   FileBox,
-  Info,
   LockKeyhole,
-  MoreVertical,
   PackagePlus,
   Pencil,
   SquareArrowOutUpRightIcon,
-  Trash2,
 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
-  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -29,7 +24,6 @@ import {
 import { CreateContainerForm } from "./_components/CreateContainerForm";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,

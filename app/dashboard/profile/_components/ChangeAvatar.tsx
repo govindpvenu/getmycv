@@ -4,7 +4,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
   ArrowLeftIcon,
   CircleFadingArrowUp,
-  CircleUserRoundIcon,
   XIcon,
   ZoomInIcon,
   ZoomOutIcon,
@@ -47,7 +46,7 @@ async function getCroppedImg(
   imageSrc: string,
   pixelCrop: Area,
   outputWidth: number = pixelCrop.width, // Optional: specify output size
-  outputHeight: number = pixelCrop.height,
+  outputHeight: number = pixelCrop.height
 ): Promise<Blob | null> {
   try {
     const image = await createImage(imageSrc);
@@ -72,7 +71,7 @@ async function getCroppedImg(
       0,
       0,
       outputWidth, // Draw onto the output size
-      outputHeight,
+      outputHeight
     );
 
     // Convert canvas to blob
@@ -222,6 +221,7 @@ export default function ChangeAvatar({ image }: { image: string | null }) {
           aria-label={finalImageUrl ? "Change image" : "Upload image"}
         >
           {finalImageUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               className="size-full object-cover"
               src={finalImageUrl}

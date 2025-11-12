@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CircleAlertIcon, Loader, Loader2, Trash2 } from "lucide-react";
+import { CircleAlertIcon, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import {

@@ -1,7 +1,5 @@
-import Image from "next/image";
 import { SignUpForm } from "../_components/SignUpForm";
-import { Boxes, GalleryVerticalEnd } from "lucide-react";
-import Link from "next/link";
+import { Boxes } from "lucide-react";
 import GetMyCV from "@/components/GetMyCV";
 import ThemeToggle from "@/components/ThemeToggle";
 import Balatro from "@/components/react-bits/Balatro";

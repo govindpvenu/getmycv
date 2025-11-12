@@ -19,7 +19,7 @@ interface BalatroProps {
 }
 
 function hexToVec4(hex: string): [number, number, number, number] {
-  let hexStr = hex.replace("#", "");
+  const hexStr = hex.replace("#", "");
   let r = 0,
     g = 0,
     b = 0,
@@ -143,7 +143,14 @@ export default function Balatro({
     const gl = renderer.gl;
     gl.clearColor(0, 0, 0, 1);
 
-    let program: Program;
+    let program: Program = new Program(gl, {
+      vertex: vertexShader,
+      fragment: fragmentShader,
+      uniforms: {
+        iTime: { value: 0 },
+        iResolution: { value: [0, 0, 0] },
+      },
+    });
 
     function resize() {
       renderer.setSize(container.offsetWidth, container.offsetHeight);

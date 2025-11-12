@@ -9,8 +9,6 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import { Badge } from "@/components/ui/badge";
-import { TrendingUp } from "lucide-react";
 import { MonthlyStats } from "@/types/containerTypes";
 
 const chartConfig = {

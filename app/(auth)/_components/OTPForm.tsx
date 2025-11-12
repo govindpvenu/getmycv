@@ -49,24 +49,24 @@ export function OTPForm({ stage }: { stage: Stage }) {
   async function onSubmit(values: z.infer<typeof FormSchema>) {
     console.log("otp submited:", values);
 
-    const { data, error } = await authClient.signIn.emailOtp(
+    await authClient.signIn.emailOtp(
       {
         email: stage.email,
         otp: values.otp,
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           //show loading
           setLoading(true);
         },
-        onSuccess: async (ctx) => {
+        onSuccess: async () => {
           router.push("/");
         },
         onError: (ctx) => {
           setLoading(false);
           toast.error(ctx.error.message);
         },
-      },
+      }
     );
   }
 
@@ -77,19 +77,19 @@ export function OTPForm({ stage }: { stage: Stage }) {
         type: "sign-in",
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           //show loading
           setLoading(true);
         },
-        onSuccess: async (ctx) => {
+        onSuccess: async () => {
           setLoading(false);
           toast.success("Verification code resent!");
         },
-        onError: (ctx) => {
+        onError: () => {
           setLoading(false);
           toast.error("Failed to resend code. Please try again.");
         },
-      },
+      }
     );
   }
 

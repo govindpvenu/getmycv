@@ -1,6 +1,5 @@
 "use client";
 
-import { Loader } from "lucide-react";
 
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";

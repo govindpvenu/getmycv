@@ -1,13 +1,18 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
 import { Icons } from "@/constants/icons";
 import { authClient } from "@/lib/auth-client";
 import { ErrorContext } from "better-auth/react";
+import dynamic from "next/dynamic";
 import { useState } from "react";
 import { toast } from "sonner";
+import { LastMethodBadgeSkeleton } from "./lastMethodBadge";
+const LastMethodBadge = dynamic(() => import("./lastMethodBadge"), {
+  ssr: false,
+  loading: () => <LastMethodBadgeSkeleton />,
+});
 
-export function GoogleAuth({ lastMethod }: { lastMethod: string | null }) {
+export function GoogleAuth() {
   const [pendingGoogle, setPendingGoogle] = useState(false);
 
   async function signInWithGoogle() {
@@ -26,7 +31,7 @@ export function GoogleAuth({ lastMethod }: { lastMethod: string | null }) {
           console.log("ctx:", ctx);
           toast.error(ctx.error.message ?? "Something went wrong.");
         },
-      },
+      }
     );
     setPendingGoogle(false);
   }
@@ -37,11 +42,7 @@ export function GoogleAuth({ lastMethod }: { lastMethod: string | null }) {
       variant="outline"
       className="w-full relative"
     >
-      {lastMethod === "google" && (
-        <Badge className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10">
-          Last used
-        </Badge>
-      )}
+      <LastMethodBadge method="google" />
       {pendingGoogle ? <Spinner /> : <Icons.google />}
       Continue with Google
     </Button>

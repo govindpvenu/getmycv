@@ -57,7 +57,7 @@ export function SignUpForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null,
+    null
   );
   const lastMethod = authClient.getLastUsedLoginMethod();
   // 1. Define your form.
@@ -91,11 +91,11 @@ export function SignUpForm() {
         callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
       },
       {
-        onRequest: (ctx) => {
+        onRequest: () => {
           //show loading
           setIsLoading(true);
         },
-        onSuccess: async (ctx) => {
+        onSuccess: async () => {
           setStage({ stage: "email-verification", email: email });
           setIsLoading(false);
           await authClient.emailOtp.sendVerificationOtp({
@@ -108,7 +108,7 @@ export function SignUpForm() {
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
-      },
+      }
     );
 
     console.log("data:", data, "error:", error);

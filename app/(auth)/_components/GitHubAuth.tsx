@@ -1,13 +1,18 @@
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { authClient } from "@/lib/auth-client";
 import { ErrorContext } from "better-auth/react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { Spinner } from "@/components/ui/spinner";
 import { Icons } from "@/constants/icons";
+import dynamic from "next/dynamic";
+import { LastMethodBadgeSkeleton } from "./lastMethodBadge";
+const LastMethodBadge = dynamic(() => import("./lastMethodBadge"), {
+  ssr: false,
+  loading: () => <LastMethodBadgeSkeleton />,
+});
 
-export function GitHubAuth({ lastMethod }: { lastMethod: string | null }) {
+export function GitHubAuth() {
   const [pendingGithub, setPendingGithub] = useState(false);
 
   async function signInWithGithub() {
@@ -26,7 +31,7 @@ export function GitHubAuth({ lastMethod }: { lastMethod: string | null }) {
           console.log("ctx:", ctx);
           toast.error(ctx.error.message ?? "Something went wrong.");
         },
-      },
+      }
     );
     setPendingGithub(false);
   }
@@ -37,11 +42,7 @@ export function GitHubAuth({ lastMethod }: { lastMethod: string | null }) {
       variant="outline"
       className="w-full relative"
     >
-      {lastMethod === "github" && (
-        <Badge className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10">
-          Last used
-        </Badge>
-      )}
+      <LastMethodBadge method="github" />
       {pendingGithub ? <Spinner /> : <Icons.github />}
       Continue with GitHub
     </Button>

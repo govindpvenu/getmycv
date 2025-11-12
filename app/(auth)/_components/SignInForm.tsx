@@ -3,7 +3,7 @@ import * as z from "zod";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
-import { useForm } from "react-hook-form";
+import { useForm, useWatch } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -16,16 +16,21 @@ import { Input } from "@/components/ui/input";
 import { Password } from "@/components/origin-ui/password";
 import { Checkbox } from "@/components/ui/checkbox";
 import { authClient } from "@/lib/auth-client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
-import {} from "lucide-react";
 import { Stage } from "@/types/authTypes";
 import { OTPForm } from "./OTPForm";
 import Link from "next/link";
 import { GitHubAuth } from "./GitHubAuth";
 import { GoogleAuth } from "./GoogleAuth";
-import { Badge } from "@/components/ui/badge";
 import { Spinner } from "@/components/ui/spinner";
+import dynamic from "next/dynamic";
+import { LastMethodBadgeSkeleton } from "./lastMethodBadge";
+
+const LastMethodBadge = dynamic(() => import("./lastMethodBadge"), {
+  ssr: false,
+  loading: () => <LastMethodBadgeSkeleton />,
+});
 
 const formSchema = z.object({
   email_or_username: z.email({ message: "Invalid email address" }).or(
@@ -36,7 +41,7 @@ const formSchema = z.object({
       .regex(/^[a-zA-Z0-9_.]+$/, {
         message:
           "Username may only contain letters, numbers, underscores, and dots",
-      }),
+      })
   ),
   password: z
     .string()
@@ -47,15 +52,6 @@ const formSchema = z.object({
 export function SignInForm() {
   const [stage, setStage] = useState<Stage>({ stage: "sign-in", email: "" });
   const [isLoading, setIsLoading] = useState(false);
-  const [mounted, setMounted] = useState(false);
-  const [lastMethod, setLastMethod] = useState<string | null>(null);
-  useEffect(() => {
-    // runs only on client, after hydration
-    try {
-      setLastMethod(authClient.getLastUsedLoginMethod());
-    } catch {}
-    setMounted(true);
-  }, []);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -65,6 +61,11 @@ export function SignInForm() {
       password: "12345678",
       remember_me: true,
     },
+  });
+
+  const emailOrUsername = useWatch({
+    control: form.control,
+    name: "email_or_username",
   });
 
   // 2. Define a submit handler.
@@ -77,7 +78,7 @@ export function SignInForm() {
 
     if (email_or_username.includes("@")) {
       const email = email_or_username;
-      const { data, error } = await authClient.signIn.email(
+      await authClient.signIn.email(
         {
           email, // user email address
           password, // user password -> min 8 characters by default
@@ -85,11 +86,11 @@ export function SignInForm() {
           rememberMe: remember_me || false, //Remember me
         },
         {
-          onRequest: (ctx) => {
+          onRequest: () => {
             //show loading
             setIsLoading(true);
           },
-          onSuccess: async (ctx) => {
+          onSuccess: async () => {
             //redirect to the dashboard or sign in page
           },
 
@@ -107,10 +108,10 @@ export function SignInForm() {
               toast.error(ctx.error.message);
             }
           },
-        },
+        }
       );
     } else {
-      const { data, error } = await authClient.signIn.username(
+      await authClient.signIn.username(
         {
           username: email_or_username, // user email address
           password, // user password -> min 8 characters by default
@@ -118,11 +119,11 @@ export function SignInForm() {
           rememberMe: remember_me || false, //Remember me
         },
         {
-          onRequest: (ctx) => {
+          onRequest: () => {
             //show loading
             setIsLoading(true);
           },
-          onSuccess: async (ctx) => {
+          onSuccess: async () => {
             //redirect to the dashboard or sign in page
           },
 
@@ -132,13 +133,13 @@ export function SignInForm() {
             if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
               console.log("EMAIL_NOT_VERIFIED");
               toast.error(
-                "Email not verified. Enter your email to receive a verification code.",
+                "Email not verified. Enter your email to receive a verification code."
               );
             } else {
               toast.error(ctx.error.message);
             }
           },
-        },
+        }
       );
     }
   }
@@ -195,7 +196,7 @@ export function SignInForm() {
                     <div className="flex items-center">
                       <FormLabel>Password *</FormLabel>
                       <Link
-                        href={`/forgot-password?email=${form.watch("email_or_username")}`}
+                        href={`/forgot-password?email=${emailOrUsername ?? ""}`}
                         className="ml-auto text-sm underline-offset-4 hover:underline"
                       >
                         Forgot your password?
@@ -233,14 +234,7 @@ export function SignInForm() {
               className="rounded-lg relative"
               size="sm"
             >
-              {mounted && lastMethod === "email" && (
-                <Badge
-                  variant="secondary"
-                  className="absolute top-0 right-0 -mt-2 -mr-2 leading-none z-10"
-                >
-                  Last used
-                </Badge>
-              )}
+              <LastMethodBadge method="email" />
               {isLoading ? <Spinner /> : "Sign In"}
             </Button>
 
@@ -250,9 +244,9 @@ export function SignInForm() {
               </span>
             </div>
 
-            <GitHubAuth lastMethod={lastMethod} />
+            <GitHubAuth />
 
-            <GoogleAuth lastMethod={lastMethod} />
+            <GoogleAuth />
           </div>
           <div className="text-center text-sm">
             Don&apos;t have an account?{" "}

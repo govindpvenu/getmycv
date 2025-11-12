@@ -1,6 +1,4 @@
-import { GalleryVerticalEnd } from "lucide-react";
 import { ResetPasswordForm } from "../_components/ResetPassword";
-import Link from "next/link";
 import GetMyCV from "@/components/GetMyCV";
 import ThemeToggle from "@/components/ThemeToggle";
 

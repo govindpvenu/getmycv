@@ -13,7 +13,6 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/lib/auth-client";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -27,12 +26,10 @@ import {
   Boxes,
   CircleUser,
   Cog,
-  FileBox,
   LayoutDashboard,
   LogOutIcon,
 } from "lucide-react";
 import Link from "next/link";
-import { HyperText } from "@/components/magic-ui/hyper-text";
 
 const links = [
   {
