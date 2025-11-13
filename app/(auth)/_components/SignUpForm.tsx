@@ -57,7 +57,7 @@ export function SignUpForm({ email }: { email: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const [stage, setStage] = useState<Stage>({ stage: "sign-up", email: "" });
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
-    null
+    null,
   );
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
@@ -107,7 +107,7 @@ export function SignUpForm({ email }: { email: string }) {
           toast.error(ctx.error.message);
           setIsLoading(false);
         },
-      }
+      },
     );
 
     console.log("data:", data, "error:", error);

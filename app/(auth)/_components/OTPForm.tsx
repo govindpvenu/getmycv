@@ -66,7 +66,7 @@ export function OTPForm({ stage }: { stage: Stage }) {
           setLoading(false);
           toast.error(ctx.error.message);
         },
-      }
+      },
     );
   }
 
@@ -89,7 +89,7 @@ export function OTPForm({ stage }: { stage: Stage }) {
           setLoading(false);
           toast.error("Failed to resend code. Please try again.");
         },
-      }
+      },
     );
   }
 

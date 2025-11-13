@@ -31,7 +31,7 @@ export function GitHubAuth() {
           console.log("ctx:", ctx);
           toast.error(ctx.error.message ?? "Something went wrong.");
         },
-      }
+      },
     );
     setPendingGithub(false);
   }

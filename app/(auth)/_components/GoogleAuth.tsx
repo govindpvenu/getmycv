@@ -31,7 +31,7 @@ export function GoogleAuth() {
           console.log("ctx:", ctx);
           toast.error(ctx.error.message ?? "Something went wrong.");
         },
-      }
+      },
     );
     setPendingGoogle(false);
   }
