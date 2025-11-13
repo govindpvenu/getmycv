@@ -1,7 +1,7 @@
 import CopyButton from "@/app/dashboard/_components/CopyButton";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Button } from "@/components/ui/button";
-import ViewTracker from "./ViewTracker";
+import ViewTracker from "./_components/ViewTracker";
 import { db } from "@/db/drizzle";
 import { container, user } from "@/db/schemas";
 import { and, eq } from "drizzle-orm";
@@ -9,6 +9,7 @@ import { Download } from "lucide-react";
 import { cookies, headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { auth } from "@/lib/auth";
+import { PrivateResumeNotice } from "./_components/private-resume-notice";
 
 export default async function ResumePage({
   params,
@@ -44,7 +45,7 @@ export default async function ResumePage({
   if (!containerData) notFound();
 
   if (containerData?.isPrivate && containerData?.userId !== userId) {
-    return <div>Resume is private</div>;
+    return <PrivateResumeNotice />;
   }
 
   const cookieStore = await cookies();

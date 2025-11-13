@@ -1,28 +1,29 @@
 import Link from "next/link";
-import { ArrowLeft, Compass, FileWarning } from "lucide-react";
+import { AnimatedGroup } from "@/components/ui/animated-group";
 import { Button } from "@/components/ui/button";
 import { TextEffect } from "@/components/ui/text-effect";
-import { AnimatedGroup } from "@/components/ui/animated-group";
+import { Lock, ShieldAlert, UserPlus } from "lucide-react";
 
-export default function NotFound() {
+export function PrivateResumeNotice() {
   return (
     <main className="relative flex min-h-dvh items-center justify-center overflow-hidden bg-background">
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute left-1/2 top-16 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/20 blur-3xl dark:bg-primary/25" />
-        <div className="absolute inset-x-0 bottom-0 h-64 bg-linear-to-t from-background via-background/75 to-transparent" />
-        <div className="absolute inset-y-0 left-1/2 h-full w-px -translate-x-1/2 bg-linear-to-b from-transparent via-border/30 to-transparent" />
+        <div className="absolute left-1/2 top-12 h-[420px] w-[420px] -translate-x-1/2 rounded-full bg-primary/15 blur-3xl dark:bg-primary/25" />
+        <div className="absolute inset-x-0 bottom-0 h-72 bg-linear-to-t from-background via-background/80 to-transparent" />
+        <div className="absolute inset-y-0 left-8 h-full w-px bg-linear-to-b from-transparent via-border/30 to-transparent" />
+        <div className="absolute inset-y-0 right-8 h-full w-px bg-linear-to-b from-transparent via-border/20 to-transparent" />
       </div>
 
       <AnimatedGroup
         preset="blur"
-        className="border-border/60 bg-card/85 backdrop-blur-xl relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-8 rounded-3xl border px-8 py-14 text-center shadow-xl shadow-black/5"
+        className="border-border/60 bg-card/85 backdrop-blur-2xl relative z-10 mx-auto flex w-full max-w-3xl flex-col items-center gap-8 rounded-3xl border px-8 py-14 text-center shadow-xl shadow-black/5"
       >
         <div
           key="badge"
           className="bg-primary/90 text-primary-foreground inline-flex items-center gap-2 rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-[0.28em]"
         >
-          <Compass className="size-4" />
-          404
+          <Lock className="size-4" />
+          Private
         </div>
 
         <TextEffect
@@ -31,7 +32,7 @@ export default function NotFound() {
           as="h1"
           className="text-balance text-3xl font-semibold tracking-tight sm:text-4xl"
         >
-          Page not found
+          You are not authorized to access this resource
         </TextEffect>
 
         <TextEffect
@@ -42,7 +43,7 @@ export default function NotFound() {
           as="p"
           className="text-pretty text-sm text-muted-foreground sm:text-base"
         >
-          {`We couldn't find the page you're looking for.\nThe link may be outdated or the content might have moved.`}
+          {`This resume is protected by its owner.\nAsk for access or sign in with the correct account to view the document.`}
         </TextEffect>
 
         <div
@@ -50,24 +51,26 @@ export default function NotFound() {
           className="grid w-full gap-3 text-left sm:grid-cols-2 sm:gap-4"
         >
           <div className="border-border/60 bg-muted/50 flex items-start gap-3 rounded-2xl border p-4">
-            <FileWarning className="size-5 text-primary" />
+            <ShieldAlert className="size-5 text-primary" />
             <div className="space-y-1">
               <p className="text-sm font-medium text-foreground">
-                Double-check the link
+                Request permission
               </p>
               <p className="text-xs text-muted-foreground">
-                Ensure the URL is spelled correctly or try refresh the page
-                again.
+                Reach out to the owner and ask them to share an accessible link
+                or update your permissions.
               </p>
             </div>
           </div>
           <div className="border-border/60 bg-muted/50 flex items-start gap-3 rounded-2xl border p-4">
-            <ArrowLeft className="size-5 text-primary" />
+            <UserPlus className="size-5 text-primary" />
             <div className="space-y-1">
-              <p className="text-sm font-medium text-foreground">Start over</p>
+              <p className="text-sm font-medium text-foreground">
+                Sign in to continue
+              </p>
               <p className="text-xs text-muted-foreground">
-                Head back to your dashboard or return to the homepage to keep
-                exploring.
+                Try logging in with the account that was granted access to this
+                resume.
               </p>
             </div>
           </div>
@@ -75,7 +78,7 @@ export default function NotFound() {
 
         <div key="actions" className="flex flex-col gap-2 sm:flex-row">
           <Button asChild size="lg" className="rounded-xl px-6">
-            <Link href="/">Return Home</Link>
+            <Link href="/sign-in">Sign in</Link>
           </Button>
           <Button
             asChild
@@ -83,7 +86,7 @@ export default function NotFound() {
             variant="outline"
             className="rounded-xl px-6"
           >
-            <Link href="/dashboard">Open Dashboard</Link>
+            <Link href="/">Return Home</Link>
           </Button>
         </div>
       </AnimatedGroup>
