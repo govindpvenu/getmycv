@@ -1,5 +1,5 @@
 import ProfilePage from "./profile-page";
 
-export default async function Profile() {
+export default function Profile() {
   return <ProfilePage />;
 }

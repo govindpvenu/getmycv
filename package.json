@@ -6,7 +6,6 @@
     "dev": "next dev --turbopack",
     "build": "next build --webpack",
     "build:turbopack": "next build --turbopack",
-    "start": "next start",
     "format": "prettier . --write",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
@@ -77,6 +76,7 @@
       "@types/react-dom": "19.2.3"
     },
     "onlyBuiltDependencies": [
+      "better-sqlite3",
       "esbuild",
       "sharp",
       "unrs-resolver"
