@@ -4,8 +4,10 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 export default async function DashboardLayout({
   children,
+  preview,
 }: {
   children: React.ReactNode;
+  preview: React.ReactNode;
 }) {
   const session = await auth.api.getSession({
     headers: await headers(),
@@ -20,6 +22,7 @@ export default async function DashboardLayout({
     >
       <SidebarMain user={session.user} />
       {children}
+      {preview}
     </div>
   );
 }

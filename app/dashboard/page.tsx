@@ -163,7 +163,9 @@ function ContainerCard({
             size="sm"
             className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
           >
-            <Link href={`/${username}/${container.slug}`}>Preview</Link>
+            <Link prefetch={true} href={`/${username}/${container.slug}`}>
+              Preview
+            </Link>
           </Button>
           <Button
             className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
