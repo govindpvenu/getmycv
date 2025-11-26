@@ -1,8 +1,8 @@
-import type { Metadata } from "next";
-import "./globals.css";
-import { Toaster } from "@/components/ui/sonner";
-import { Geist_Mono, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
+import type { Metadata } from "next";
+import { Geist_Mono, JetBrains_Mono } from "next/font/google";
+import "./globals.css";
 
 const jetBrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
