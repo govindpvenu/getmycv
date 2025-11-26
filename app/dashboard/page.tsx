@@ -52,6 +52,7 @@ import { Suspense } from "react";
 import DeleteButton from "./_components/DeleteButton";
 import { Spinner } from "@/components/ui/spinner";
 import { Skeleton } from "@/components/ui/skeleton";
+import EditButton from "./_components/EditButton";
 
 export default async function DashboardPage() {
   const session = await auth.api.getSession({
@@ -182,9 +183,7 @@ function ContainerCard({
         <ShareButton
           link={`${process.env.NEXT_PUBLIC_BASE_URL}/${username}/${container.slug}`}
         />
-        <Button variant="outline" size="sm">
-          <Pencil size={16} aria-hidden="true" />
-        </Button>
+        <EditButton container={container} />
         <DeleteButton
           containerId={container.id}
           containerSlug={container.slug}
