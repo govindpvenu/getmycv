@@ -2,7 +2,7 @@
 
 import { useRef, useState } from "react";
 
-import { CheckIcon, CopyIcon, Share2 } from "lucide-react";
+import { CheckIcon, CopyIcon, Mail, Share2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -18,6 +18,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Icons } from "@/constants/icons";
 
 export default function ShareButton({ link }: { link: string }) {
   const [copied, setCopied] = useState<boolean>(false);
@@ -39,10 +40,32 @@ export default function ShareButton({ link }: { link: string }) {
             <Share2 size={16} aria-hidden="true" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="w-72 md:w-lg ">
-          <div className="flex flex-col gap-3 text-center">
+        <PopoverContent className="w-72 bg-accent " sideOffset={10}>
+          <div className="flex flex-col gap-3 text-center ">
             <div className="text-sm font-medium">Share link</div>
-
+            <div className="flex flex-wrap justify-center gap-2">
+              <Button
+                aria-label="Share via email"
+                size="icon"
+                variant="outline"
+              >
+                <Mail aria-hidden="true" size={16} />
+              </Button>
+              <Button
+                aria-label="Share on Twitter"
+                size="icon"
+                variant="outline"
+              >
+                <Icons.x aria-hidden="true" />
+              </Button>
+              <Button
+                aria-label="Share on Facebook"
+                size="icon"
+                variant="outline"
+              >
+                <Icons.linkedin aria-hidden="true" />
+              </Button>
+            </div>
             <div className="space-y-2">
               <div className="relative">
                 <Input
@@ -67,7 +90,7 @@ export default function ShareButton({ link }: { link: string }) {
                             "transition-all",
                             copied
                               ? "scale-100 opacity-100"
-                              : "scale-0 opacity-0",
+                              : "scale-0 opacity-0"
                           )}
                         >
                           <CheckIcon
@@ -81,7 +104,7 @@ export default function ShareButton({ link }: { link: string }) {
                             "absolute transition-all",
                             copied
                               ? "scale-0 opacity-0"
-                              : "scale-100 opacity-100",
+                              : "scale-100 opacity-100"
                           )}
                         >
                           <CopyIcon size={16} aria-hidden="true" />
