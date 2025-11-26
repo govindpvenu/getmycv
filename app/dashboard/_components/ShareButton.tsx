@@ -90,7 +90,7 @@ export default function ShareButton({ link }: { link: string }) {
                             "transition-all",
                             copied
                               ? "scale-100 opacity-100"
-                              : "scale-0 opacity-0"
+                              : "scale-0 opacity-0",
                           )}
                         >
                           <CheckIcon
@@ -104,7 +104,7 @@ export default function ShareButton({ link }: { link: string }) {
                             "absolute transition-all",
                             copied
                               ? "scale-0 opacity-0"
-                              : "scale-100 opacity-100"
+                              : "scale-100 opacity-100",
                           )}
                         >
                           <CopyIcon size={16} aria-hidden="true" />

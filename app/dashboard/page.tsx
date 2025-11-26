@@ -10,7 +10,6 @@ import {
   FileBox,
   LockKeyhole,
   PackagePlus,
-  Pencil,
   SquareArrowOutUpRightIcon,
 } from "lucide-react";
 import {

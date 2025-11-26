@@ -103,7 +103,7 @@ export default function HeroSection() {
                     className="h-10.5 rounded-xl px-5 text-base"
                   >
                     <Link href="#link">
-                      <span className="text-nowrap">Learn more</span>
+                      <span className="text-nowrap">Convince Me</span>
                     </Link>
                   </Button>
                 </AnimatedGroup>

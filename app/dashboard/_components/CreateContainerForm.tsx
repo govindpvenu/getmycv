@@ -17,6 +17,7 @@ import { Switch } from "@/components/ui/switch";
 import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { upload } from "@vercel/blob/client";
+import { UploadCloud } from "lucide-react";
 
 type Schema = z.infer<typeof containerSchema>;
 
@@ -146,25 +147,51 @@ export function CreateContainerForm() {
           name="resume"
           control={form.control}
           render={({ field, fieldState }) => (
-            <div>
-              <Field data-invalid={fieldState.invalid} className="gap-1">
-                <FieldLabel htmlFor="resume">Upload Resume *</FieldLabel>
-                <FieldDescription>
-                  Select a file to upload from your device
-                </FieldDescription>
-                <Input
-                  name="resume"
-                  type="file"
-                  accept="application/pdf"
-                  onChange={(e) => field.onChange(e.target.files?.[0])}
-                  aria-invalid={fieldState.invalid}
-                />
-
-                {fieldState.invalid && (
-                  <FieldError errors={[fieldState.error]} />
-                )}
-              </Field>
-            </div>
+            <Field data-invalid={fieldState.invalid} className="gap-1">
+              <FieldLabel htmlFor="resume">Upload Resume *</FieldLabel>
+              <FieldDescription id="resume-help" className="mb-4">
+                Drop or upload your resume (max 5 MB)
+              </FieldDescription>
+              <Input
+                id="resume"
+                name={field.name}
+                type="file"
+                accept="application/pdf"
+                className="sr-only "
+                aria-invalid={fieldState.invalid}
+                aria-describedby="resume-help"
+                onBlur={field.onBlur}
+                ref={field.ref}
+                onChange={(event) =>
+                  field.onChange(event.target.files?.[0] ?? null)
+                }
+              />
+              <label
+                htmlFor="resume"
+                className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-muted-foreground/40 bg-muted/20 px-4 py-6 text-center transition hover:border-primary hover:bg-background"
+              >
+                <UploadCloud className="h-8 w-8 text-muted-foreground transition group-hover:text-primary" />
+                <div className="space-y-1">
+                  <p className="text-sm font-medium text-foreground">
+                    {field.value?.name ?? "Select your latest resume"}
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    {field.value
+                      ? "Click to replace the current file"
+                      : "PDF only · drag & drop supported"}
+                  </p>
+                </div>
+              </label>
+              {field.value && (
+                <p className="text-xs text-muted-foreground">
+                  Selected file:{" "}
+                  <span className="font-medium text-foreground">
+                    {field.value.name}
+                  </span>
+                </p>
+              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
           )}
         />
 
