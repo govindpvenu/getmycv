@@ -1,2 +1,2 @@
-export * from "./auth-schema";
-export * from "./container-schema";
+export * as authSchema from "./auth-schema";
+export * as containerSchema from "./container-schema";

@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     "localhost:3000",
     "*.localhost:3000",
   ],
+  serverExternalPackages: ["better-auth"],
 };
 
 export default nextConfig;

@@ -1,7 +1,8 @@
 import { db } from "@/db/drizzle";
 import { and, eq } from "drizzle-orm";
 import { notFound } from "next/navigation";
-import { container, user } from "@/db/schemas";
+import { container } from "@/db/schemas/container-schema";
+import { user } from "@/db/schemas/auth-schema";
 import PreviewModalWrapper from "../PreviewModalWrapper";
 import { Suspense } from "react";
 import { DialogDescription, DialogHeader } from "@/components/ui/dialog";

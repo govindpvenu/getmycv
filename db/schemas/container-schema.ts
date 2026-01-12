@@ -29,7 +29,7 @@ export const container = pgTable(
   (t) => [
     // ensure each user can reuse slugs, but not duplicate their own
     uniqueIndex("container_user_slug_unique").on(t.userId, t.slug),
-  ],
+  ]
 );
 
 export interface ContainerEventAttributes {
@@ -54,7 +54,5 @@ export const containerEvent = pgTable(
     index("container_event_container_id_idx").on(t.containerId),
     index("container_event_type_idx").on(t.eventType),
     index("container_event_occurred_at_idx").on(t.occurredAt),
-  ],
+  ]
 );
-
-export * as containerSchema from "./container-schema";

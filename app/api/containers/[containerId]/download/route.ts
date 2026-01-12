@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { db } from "@/db/drizzle";
-import { container, containerEvent } from "@/db/schemas";
+import { container, containerEvent } from "@/db/schemas/container-schema";
 import { eq } from "drizzle-orm";
 
 export async function GET(
   _req: Request,
-  { params }: { params: Promise<{ containerId: string }> },
+  { params }: { params: Promise<{ containerId: string }> }
 ) {
   const { containerId } = await params;
 

@@ -2,7 +2,7 @@
 
 import { actionClient } from "@/actions/safe-action";
 import { db } from "@/db/drizzle";
-import { container } from "@/db/schemas";
+import { container } from "@/db/schemas/container-schema";
 import { containerSchema } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import z from "zod";

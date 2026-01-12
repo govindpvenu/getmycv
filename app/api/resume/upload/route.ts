@@ -1,5 +1,5 @@
 import { db } from "@/db/drizzle";
-import { container } from "@/db/schemas";
+import { container } from "@/db/schemas/container-schema";
 import { auth } from "@/lib/auth";
 import { containerSchema } from "@/lib/schema";
 import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
@@ -51,8 +51,8 @@ export async function POST(request: Request): Promise<NextResponse> {
           .where(
             and(
               eq(container.slug, payload.slug),
-              eq(container.userId, session.user.id),
-            ),
+              eq(container.userId, session.user.id)
+            )
           );
 
         console.log("existingSlugForUser:", existingSlugForUser);
@@ -110,12 +110,12 @@ export async function POST(request: Request): Promise<NextResponse> {
     console.error("error:", error);
     console.log(
       "error:",
-      error instanceof Error ? error.message : "Unknown error",
+      error instanceof Error ? error.message : "Unknown error"
     );
 
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },
-      { status: 400 }, // The webhook will retry 5 times waiting for a 200
+      { status: 400 } // The webhook will retry 5 times waiting for a 200
     );
   }
 }
