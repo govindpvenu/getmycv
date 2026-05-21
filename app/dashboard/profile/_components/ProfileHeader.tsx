@@ -9,6 +9,11 @@ import { Calendar, Mail } from "lucide-react";
 import { getRelativeTime } from "@/lib/utils";
 
 export default function ProfileHeader({ user }: { user: Session["user"] }) {
+  const createdAt =
+    typeof user.createdAt === "string"
+      ? new Date(user.createdAt)
+      : user.createdAt;
+
   return (
     <Card>
       <CardContent>
@@ -40,7 +45,7 @@ export default function ProfileHeader({ user }: { user: Session["user"] }) {
               <div className="flex items-center gap-1">
                 <Calendar className="size-4" />
                 Joined on{" "}
-                {user?.createdAt?.toLocaleDateString("en-US", {
+                {createdAt.toLocaleDateString("en-US", {
                   year: "numeric",
                   month: "long",
                 })}

@@ -1,27 +1,17 @@
 "use client";
+
+import { useEffect, useState } from "react";
 import AccountInfo from "./_components/AccountInfo";
-import { redirect } from "next/navigation";
 import ProfileDetails from "./_components/ProfileDetails";
 import ProfileHeader from "./_components/ProfileHeader";
-import { authClient } from "@/lib/auth-client";
-import Loading from "../loading";
+import type { Session } from "@/lib/auth-client";
 
-export default function ProfilePage() {
-  const {
-    data: session,
-    isPending, //loading state
-    error, //error object
-  } = authClient.useSession();
-  console.log("session:", session);
-  if (isPending) {
-    return <Loading />;
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-  if (!session?.user) {
-    redirect("/sign-in");
-  }
+export default function ProfilePage({ user }: { user: Session["user"] }) {
+  const [currentUser, setCurrentUser] = useState(user);
+
+  useEffect(() => {
+    setCurrentUser(user);
+  }, [user]);
 
   return (
     <div className="flex flex-1">
@@ -32,9 +22,12 @@ export default function ProfilePage() {
               <h1 className="text-2xl font-semibold text-balance">
                 User Profile
               </h1>
-              <ProfileHeader user={session.user} />
-              <ProfileDetails user={session.user} />
-              <AccountInfo user={session.user} />
+              <ProfileHeader user={currentUser} />
+              <ProfileDetails
+                user={currentUser}
+                onUserUpdated={setCurrentUser}
+              />
+              <AccountInfo user={currentUser} />
             </div>
           </div>
         </div>

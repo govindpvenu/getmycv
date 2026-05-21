@@ -24,7 +24,15 @@ const formSchema = z.object({
     }),
 });
 
-export default function ProfileDetails({ user }: { user: Session["user"] }) {
+type ProfileDetailsProps = {
+  user: Session["user"];
+  onUserUpdated: (user: Session["user"]) => void;
+};
+
+export default function ProfileDetails({
+  user,
+  onUserUpdated,
+}: ProfileDetailsProps) {
   const [isLoading, setIsLoading] = useState(false);
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
@@ -43,29 +51,31 @@ export default function ProfileDetails({ user }: { user: Session["user"] }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { firstName, lastName, userName } = values;
 
-    const { data, error } = await authClient.updateUser(
-      {
-        name: `${firstName} ${lastName}`,
-        first_name: firstName,
-        last_name: lastName,
-        username: userName,
-        image: user.image,
-      },
-      {
-        onRequest: () => {
-          setIsLoading(true);
-        },
-        onSuccess: () => {
-          setIsLoading(false);
-          toast.success("Profile updated successfully");
-        },
-        onError: (ctx) => {
-          setIsLoading(false);
-          toast.error(ctx.error.message || "Failed to update profile");
-        },
-      },
-    );
+    setIsLoading(true);
+    const { data, error } = await authClient.updateUser({
+      name: `${firstName} ${lastName}`,
+      first_name: firstName,
+      last_name: lastName,
+      username: userName,
+      image: user.image,
+    });
 
+    setIsLoading(false);
+
+    if (error) {
+      toast.error(error.message || "Failed to update profile");
+      return;
+    }
+
+    onUserUpdated({
+      ...user,
+      name: `${firstName} ${lastName}`,
+      first_name: firstName,
+      last_name: lastName,
+      username: userName,
+      updatedAt: new Date(),
+    });
+    toast.success("Profile updated successfully");
     console.log("data:", data, "error:", error);
   }
 
