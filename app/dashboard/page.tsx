@@ -31,7 +31,7 @@ import {
 } from "@/components/ui/card";
 import { containerType } from "@/types/containerTypes";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { getRelativeTime } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import ShareButton from "./_components/ShareButton";
@@ -161,6 +161,7 @@ function ContainerCard({
         <div className="inline-flex -space-x-px rounded-md shadow-xs rtl:space-x-reverse">
           <Button
             size="sm"
+            asChild
             className="rounded-none shadow-none first:rounded-s-md last:rounded-e-md focus-visible:z-10"
           >
             <Link prefetch={true} href={`/${username}/${container.slug}`}>
@@ -172,6 +173,7 @@ function ContainerCard({
             variant="outline"
             size="sm"
             aria-label="Open link"
+            asChild
           >
             <Link target="_blank" href={`/${username}/${container.slug}`}>
               <SquareArrowOutUpRightIcon size={16} aria-hidden="true" />
@@ -197,10 +199,11 @@ function ContainerCard({
 function ContainerStatsDrawer({ containerId }: { containerId: string }) {
   return (
     <Drawer>
-      <DrawerTrigger asChild>
-        <Button variant="secondary" size="sm">
-          <ChartArea className="text-white" size={16} aria-hidden="true" />
-        </Button>
+      <DrawerTrigger
+        className={buttonVariants({ variant: "secondary", size: "sm" })}
+        aria-label="View container statistics"
+      >
+        <ChartArea className="text-white" size={16} aria-hidden="true" />
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader>
@@ -238,12 +241,11 @@ async function ContainerStats({ containerId }: { containerId: string }) {
 function CreateContainerCard() {
   return (
     <Dialog>
-      <DialogTrigger asChild>
-        <Card className="w-full max-w-xs border-primary/80 border-dashed   hover:border-primary transition-all duration-300 group h-96 flex justify-center bg-accent items-center ">
-          <CardContent>
-            <PackagePlus className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
-          </CardContent>
-        </Card>
+      <DialogTrigger
+        className="bg-accent text-card-foreground group flex h-96 w-full max-w-xs flex-col items-center justify-center gap-6 rounded-xl border border-dashed border-primary/80 py-6 shadow-sm transition-all duration-300 hover:border-primary"
+        aria-label="Create a new container"
+      >
+        <PackagePlus className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>

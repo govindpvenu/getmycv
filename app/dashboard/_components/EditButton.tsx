@@ -1,7 +1,9 @@
-import { Button } from "@/components/ui/button";
+"use client";
+
+import { buttonVariants } from "@/components/ui/button";
 import { Pencil } from "lucide-react";
 import { Sheet, SheetTrigger } from "@/components/ui/sheet";
-import { containerType } from "@/types/containerTypes";
+import type { containerType } from "@/types/containerTypes";
 import { EditContainerForm } from "./EditContainerForm";
 
 export default function EditButton({
@@ -11,10 +13,11 @@ export default function EditButton({
 }) {
   return (
     <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Pencil size={16} aria-hidden="true" />
-        </Button>
+      <SheetTrigger
+        className={buttonVariants({ variant: "outline", size: "sm" })}
+        aria-label="Edit container"
+      >
+        <Pencil size={16} aria-hidden="true" />
       </SheetTrigger>
       <EditContainerForm container={container} />
     </Sheet>

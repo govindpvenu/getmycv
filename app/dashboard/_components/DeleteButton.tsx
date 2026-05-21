@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { CircleAlertIcon, Trash2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -47,10 +47,11 @@ export default function DeleteButton({
   );
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <Button variant="destructive" size="sm">
-          <Trash2 size={16} aria-hidden="true" />
-        </Button>
+      <DialogTrigger
+        className={buttonVariants({ variant: "destructive", size: "sm" })}
+        aria-label="Delete container"
+      >
+        <Trash2 size={16} aria-hidden="true" />
       </DialogTrigger>
       <DialogContent className="w-md">
         <div className="flex flex-col items-center gap-2">

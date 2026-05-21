@@ -18,7 +18,13 @@ import {
   Unlink,
 } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
@@ -113,6 +119,10 @@ const themeOptions = [
   },
 ] as const;
 
+const subscribeToHydrationStore = () => () => {};
+const getHydratedSnapshot = () => true;
+const getServerSnapshot = () => false;
+
 export default function SettingsPage({
   userEmail,
   currentSessionId,
@@ -141,7 +151,12 @@ export default function SettingsPage({
 
 function AppearanceSettings() {
   const { setTheme, theme, resolvedTheme } = useTheme();
-  const activeTheme = theme;
+  const mounted = useSyncExternalStore(
+    subscribeToHydrationStore,
+    getHydratedSnapshot,
+    getServerSnapshot,
+  );
+  const activeTheme = mounted ? theme : undefined;
 
   return (
     <Card>
@@ -155,7 +170,7 @@ function AppearanceSettings() {
         <div className="grid gap-3 sm:grid-cols-3">
           {themeOptions.map((option) => {
             const Icon = option.icon;
-            const isActive = activeTheme === option.value;
+            const isActive = mounted && activeTheme === option.value;
 
             return (
               <button
@@ -188,7 +203,8 @@ function AppearanceSettings() {
           })}
         </div>
         <p className="text-muted-foreground mt-3 text-sm">
-          Current effective theme: {resolvedTheme ?? "system"}.
+          Current effective theme:{" "}
+          {mounted ? (resolvedTheme ?? "system") : "system"}.
         </p>
       </CardContent>
     </Card>
