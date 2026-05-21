@@ -167,4 +167,3 @@ The app is designed to deploy cleanly on Vercel:
 3. Configure the production database and Vercel Blob store.
 4. Run migrations against the production database.
 5. Deploy.
-

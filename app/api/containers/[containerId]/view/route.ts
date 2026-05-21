@@ -8,7 +8,7 @@ const ONE_YEAR_IN_SECONDS = 60 * 60 * 24 * 365;
 
 export async function POST(
   _request: NextRequest,
-  { params }: { params: Promise<{ containerId: string }> }
+  { params }: { params: Promise<{ containerId: string }> },
 ) {
   const { containerId } = await params;
 
