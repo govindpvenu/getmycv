@@ -1,4 +1,5 @@
 "use client";
+import { useRef } from "react";
 import * as z from "zod";
 import { containerSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -18,6 +19,8 @@ import { Spinner } from "@/components/ui/spinner";
 import { toast } from "sonner";
 import { upload } from "@vercel/blob/client";
 import { UploadCloud } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { DialogClose } from "@/components/ui/dialog";
 
 type Schema = z.infer<typeof containerSchema>;
 
@@ -65,6 +68,8 @@ async function checkSlugAvailability(slug: string) {
 }
 
 export function CreateContainerForm() {
+  const router = useRouter();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
   const form = useForm<Schema>({
     resolver: zodResolver(containerSchema),
     defaultValues: {
@@ -101,7 +106,34 @@ export function CreateContainerForm() {
       });
 
       console.log("newBlob:", newBlob);
+      const createResponse = await fetch("/api/resume/upload", {
+        method: "POST",
+        headers: {
+          "content-type": "application/json",
+        },
+        body: JSON.stringify({
+          type: "getmycv.container-create",
+          payload: {
+            title: data.title,
+            slug: data.slug,
+            is_private: data.is_private,
+            resumeUrl: newBlob.url,
+          },
+        }),
+      });
+
+      const createResult = (await createResponse.json().catch(() => null)) as {
+        error?: string;
+      } | null;
+
+      if (!createResponse.ok) {
+        throw new Error(createResult?.error ?? "Failed to create container");
+      }
+
       form.reset();
+      toast.success("Container created");
+      closeButtonRef.current?.click();
+      router.refresh();
     } catch (error: unknown) {
       const message =
         error instanceof Error ? error.message : "Failed to create container";
@@ -113,6 +145,16 @@ export function CreateContainerForm() {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col  w-full  gap-2 ">
+      <DialogClose asChild>
+        <button
+          ref={closeButtonRef}
+          type="button"
+          className="sr-only"
+          tabIndex={-1}
+        >
+          Close
+        </button>
+      </DialogClose>
       <FieldGroup>
         <Controller
           name="title"

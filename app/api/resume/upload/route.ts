@@ -6,16 +6,69 @@ import { handleUpload, type HandleUploadBody } from "@vercel/blob/client";
 import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
+import * as z from "zod";
 
 const containerApiSchema = containerSchema.omit({ resume: true });
+const createContainerBodySchema = z.object({
+  type: z.literal("getmycv.container-create"),
+  payload: containerApiSchema.extend({
+    resumeUrl: z.url(),
+  }),
+});
 
 export async function POST(request: Request): Promise<NextResponse> {
-  const body = (await request.json()) as HandleUploadBody;
+  const body = (await request.json()) as unknown;
 
   try {
+    const createContainerBody = createContainerBodySchema.safeParse(body);
+
+    if (createContainerBody.success) {
+      const session = await auth.api.getSession({
+        headers: await headers(),
+      });
+
+      if (!session) {
+        return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      }
+
+      const { title, slug, is_private, resumeUrl } =
+        createContainerBody.data.payload;
+
+      const existingSlugForUser = await db
+        .select({ id: container.id })
+        .from(container)
+        .where(
+          and(eq(container.slug, slug), eq(container.userId, session.user.id)),
+        );
+
+      if (existingSlugForUser.length > 0) {
+        return NextResponse.json(
+          { error: "Slug already exists for this user" },
+          { status: 409 },
+        );
+      }
+
+      const [createdContainer] = await db
+        .insert(container)
+        .values({
+          id: crypto.randomUUID(),
+          userId: session.user.id,
+          title,
+          slug,
+          isPrivate: is_private,
+          resumeUrl,
+        })
+        .returning({ id: container.id });
+
+      return NextResponse.json({
+        success: true,
+        containerId: createdContainer.id,
+      });
+    }
+
     const jsonResponse = await handleUpload({
       token: process.env.GETMYCV_BLOB_READ_WRITE_TOKEN,
-      body,
+      body: body as HandleUploadBody,
       request,
       onBeforeGenerateToken: async (pathname, clientPayload) => {
         // Generate a client token for the browser to upload the file
@@ -62,45 +115,11 @@ export async function POST(request: Request): Promise<NextResponse> {
 
         return {
           allowedContentTypes: ["application/pdf"],
+          maximumSizeInBytes: 10485760,
           addRandomSuffix: false,
           allowOverwrite: true,
-          tokenPayload: JSON.stringify({
-            // optional, sent to your server on upload completion
-            // you could pass a user id from auth, or a value from clientPayload
-            userId: session.user.id,
-            ...payload,
-          }),
+          tokenPayload: clientPayload,
         };
-      },
-      onUploadCompleted: async ({ blob, tokenPayload }) => {
-        // Called by Vercel API on client upload completion
-        // Use tools like ngrok if you want this to work locally
-
-        console.log("blob upload completed", blob, tokenPayload);
-
-        try {
-          // Run any logic after the file upload completed
-
-          if (!tokenPayload) {
-            throw new Error("No token payload");
-          }
-          console.log("tokenPayload:", tokenPayload);
-          const { userId, title, slug, is_private } = JSON.parse(tokenPayload);
-
-          const data = await db.insert(container).values({
-            id: crypto.randomUUID(),
-            userId: userId,
-            title: title,
-            slug: slug,
-            isPrivate: is_private,
-            resumeUrl: blob.url,
-          });
-
-          console.log("data inserted:", data);
-        } catch (error) {
-          console.error("error:", error);
-          throw new Error("Could not update user");
-        }
       },
     });
 
