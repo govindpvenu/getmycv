@@ -77,7 +77,7 @@ export function SignInForm() {
         {
           email, // user email address
           password, // user password -> min 8 characters by default
-          callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
+          callbackURL: "/dashboard", // A URL to redirect to after the user verifies their email (optional)
           rememberMe: remember_me || false, //Remember me
         },
         {
@@ -110,7 +110,7 @@ export function SignInForm() {
         {
           username: email_or_username, // user email address
           password, // user password -> min 8 characters by default
-          callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
+          callbackURL: "/dashboard", // A URL to redirect to after the user verifies their email (optional)
           rememberMe: remember_me || false, //Remember me
         },
         {

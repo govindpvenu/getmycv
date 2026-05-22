@@ -79,7 +79,7 @@ export function SignUpForm({ email }: { email: string }) {
         first_name,
         last_name,
         username,
-        callbackURL: "/", // A URL to redirect to after the user verifies their email (optional)
+        callbackURL: "/dashboard", // A URL to redirect to after the user verifies their email (optional)
       },
       {
         onRequest: () => {
