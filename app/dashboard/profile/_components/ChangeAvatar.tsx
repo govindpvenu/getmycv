@@ -87,7 +87,7 @@ async function getCroppedImg(
 }
 
 export default function ChangeAvatar({ image }: { image: string | null }) {
-  console.log("image:", image);
+  // console.log("image:", image);
 
   const [
     { files, isDragging },

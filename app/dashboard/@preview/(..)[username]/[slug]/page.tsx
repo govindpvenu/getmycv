@@ -13,7 +13,7 @@ export default async function ResumePreview({
 }: {
   params: Promise<{ username: string; slug: string }>;
 }) {
-  console.log("intercepting route..");
+  // console.log("intercepting route..");
 
   const { username, slug } = await params;
 
@@ -46,7 +46,7 @@ async function PreviewModalContent({
     .innerJoin(user, eq(user.id, container.userId))
     .where(and(eq(user.username, username), eq(container.slug, slug)))
     .limit(1);
-  console.log("row:", row);
+  // console.log("row:", row);
 
   const containerData = row[0];
   if (!containerData) notFound();

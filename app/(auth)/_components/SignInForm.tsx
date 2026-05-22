@@ -72,7 +72,7 @@ export function SignInForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    // console.log(values);
 
     const { email_or_username, password, remember_me } = values;
 
@@ -96,9 +96,9 @@ export function SignInForm() {
 
           onError: async (ctx) => {
             setIsLoading(false);
-            console.log("CTX:", ctx);
+            // console.log("CTX:", ctx);
             if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
-              console.log("EMAIL_NOT_VERIFIED");
+              // console.log("EMAIL_NOT_VERIFIED");
               await authClient.emailOtp.sendVerificationOtp({
                 email: email,
                 type: "sign-in",
@@ -129,9 +129,9 @@ export function SignInForm() {
 
           onError: async (ctx) => {
             setIsLoading(false);
-            console.log("CTX:", ctx);
+            // console.log("CTX:", ctx);
             if (ctx.error.code === "EMAIL_NOT_VERIFIED") {
-              console.log("EMAIL_NOT_VERIFIED");
+              // console.log("EMAIL_NOT_VERIFIED");
               toast.error(
                 "Email not verified. Enter your email to receive a verification code.",
               );

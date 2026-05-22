@@ -76,10 +76,10 @@ export function SignUpForm({ email }: { email: string }) {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     // Do something with the form values.
     // ✅ This will be type-safe and validated.
-    console.log(values);
+    // console.log(values);
 
     const { email, password, first_name, last_name, username } = values;
-    const { data, error } = await authClient.signUp.email(
+    await authClient.signUp.email(
       {
         email, // user email address
         password, // user password -> min 8 characters by default
@@ -110,7 +110,7 @@ export function SignUpForm({ email }: { email: string }) {
       },
     );
 
-    console.log("data:", data, "error:", error);
+    // console.log("data:", data, "error:", error);
   }
 
   if (stage.stage === "email-verification") {

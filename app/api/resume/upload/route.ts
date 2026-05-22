@@ -84,15 +84,15 @@ export async function POST(request: Request): Promise<NextResponse> {
         if (!session) {
           throw new Error("Unauthorized");
         }
-        console.log("user is authenticated:", session.user.id);
+        // console.log("user is authenticated:", session.user.id);
 
         // ⚠️ When using the clientPayload feature, make sure to validate it
         // otherwise this could introduce security issues for your app
         // like allowing users to modify other users' posts
         const payload = JSON.parse(clientPayload);
-        console.log("payload:", payload);
+        // console.log("payload:", payload);
         const data = containerApiSchema.safeParse(payload);
-        console.log("data:", data);
+        // console.log("data:", data);
         if (!data.success) {
           throw new Error("Invalid payload");
         }
@@ -108,7 +108,7 @@ export async function POST(request: Request): Promise<NextResponse> {
             ),
           );
 
-        console.log("existingSlugForUser:", existingSlugForUser);
+        // console.log("existingSlugForUser:", existingSlugForUser);
         if (existingSlugForUser.length > 0) {
           throw new Error("Slug already exists for this user");
         }
@@ -123,14 +123,14 @@ export async function POST(request: Request): Promise<NextResponse> {
       },
     });
 
-    console.log("jsonResponse:", jsonResponse);
+    // console.log("jsonResponse:", jsonResponse);
     return NextResponse.json(jsonResponse);
   } catch (error: unknown) {
-    console.error("error:", error);
-    console.log(
-      "error:",
-      error instanceof Error ? error.message : "Unknown error",
-    );
+    // console.error("error:", error);
+    // console.log(
+    //   "error:",
+    //   error instanceof Error ? error.message : "Unknown error",
+    // );
 
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Unknown error" },

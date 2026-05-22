@@ -86,7 +86,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
   });
 
   const handleSubmit = form.handleSubmit(async (data: Schema) => {
-    console.log("handleSubmit data:", data);
+    // console.log("handleSubmit data:", data);
     try {
       if (data.slug !== container.slug) {
         const slugAvailability = await checkSlugAvailability(data.slug);
@@ -101,7 +101,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
         }
       }
 
-      const newBlob = await upload(data.resume.name, data.resume, {
+      await upload(data.resume.name, data.resume, {
         access: "public",
         handleUploadUrl: "/api/resume/upload",
         clientPayload: JSON.stringify({
@@ -111,7 +111,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
         }),
       });
 
-      console.log("newBlob:", newBlob);
+      // console.log("newBlob:", newBlob);
       form.reset();
     } catch (error: unknown) {
       const message =

@@ -37,7 +37,7 @@ export default function ProfileDetails({
   const usernameCheckTimeout = useRef<ReturnType<typeof setTimeout> | null>(
     null,
   );
-  console.log("user:", user);
+  // console.log("user:", user);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -52,7 +52,7 @@ export default function ProfileDetails({
     const { firstName, lastName, userName } = values;
 
     setIsLoading(true);
-    const { data, error } = await authClient.updateUser({
+    const { error } = await authClient.updateUser({
       name: `${firstName} ${lastName}`,
       first_name: firstName,
       last_name: lastName,
@@ -76,7 +76,7 @@ export default function ProfileDetails({
       updatedAt: new Date(),
     });
     toast.success("Profile updated successfully");
-    console.log("data:", data, "error:", error);
+    // console.log("data:", data, "error:", error);
   }
 
   return (

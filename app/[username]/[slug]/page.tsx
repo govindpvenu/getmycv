@@ -18,8 +18,8 @@ export default async function ResumePage({
   params: Promise<{ username: string; slug: string }>;
 }) {
   const { username, slug } = await params;
-  console.log("username:", username);
-  console.log("slug:", slug);
+  // console.log("username:", username);
+  // console.log("slug:", slug);
   const session = await auth.api.getSession({
     headers: await headers(),
   });
