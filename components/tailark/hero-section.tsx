@@ -51,7 +51,7 @@ export default function HeroSection() {
                   as="h1"
                   className="mt-8 max-w-2xl text-balance text-4xl font-medium md:text-5xl lg:mt-16"
                 >
-                  Manage,Share & Track your CV
+                  Manage, share, and track every CV link
                 </TextEffect>
                 <TextEffect
                   per="line"
@@ -61,10 +61,9 @@ export default function HeroSection() {
                   as="p"
                   className="mt-8 max-w-2xl text-pretty text-base"
                 >
-                  Begin with a new approach to managing your CVs, each with a
-                  unique shareable link for recruiters.Keep links consistent
-                  even as documents are updated for streamlined sharing and
-                  tracking.
+                  Upload each CV version once, share a clean recruiter-ready
+                  link, and keep the same URL even when your document changes.
+                  GetMyCV helps you stay organized through every application.
                 </TextEffect>
 
                 <AnimatedGroup
@@ -102,8 +101,8 @@ export default function HeroSection() {
                     variant="ghost"
                     className="h-10.5 rounded-xl px-5 text-base"
                   >
-                    <Link href="#link">
-                      <span className="text-nowrap">Convince Me</span>
+                    <Link href="#features">
+                      <span className="text-nowrap">Convice me</span>
                     </Link>
                   </Button>
                 </AnimatedGroup>

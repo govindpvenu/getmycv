@@ -7,14 +7,15 @@ import { useState } from "react";
 export default function CallToAction() {
   const [email, setEmail] = useState("");
   return (
-    <section className="py-8 md:py-16">
+    <section id="start" className="py-8 md:py-16">
       <div className="mx-auto max-w-5xl px-6">
         <div className="text-center">
           <h2 className="text-balance text-3xl font-semibold lg:text-4xl">
-            Sign up for free
+            Start organizing your CVs for free
           </h2>
           <p className="mt-4 max-w-md mx-auto">
-            Create your account and start managing your CVs today.
+            Create your account, upload your first CV, and share a cleaner link
+            with your next application.
           </p>
 
           <form action="" className="mx-auto mt-10 max-w-sm lg:mt-12">
@@ -22,7 +23,7 @@ export default function CallToAction() {
               <AtSign className="text-caption pointer-events-none absolute inset-y-0 left-5 my-auto size-5" />
 
               <input
-                placeholder="Your mail address"
+                placeholder="Your email address"
                 className="h-14 w-full bg-transparent pl-12 focus:outline-none"
                 type="email"
                 value={email}

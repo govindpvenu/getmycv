@@ -22,35 +22,34 @@ export default function Features2() {
 
   const images = {
     "item-1": {
-      image: "/charts.png",
-      alt: "Database visualization",
+      image: "/dashboard-light.png",
+      alt: "CV link analytics",
     },
     "item-2": {
-      image: "/music.png",
-      alt: "Security authentication",
+      image: "/dashboard.png",
+      alt: "CV version library",
     },
     "item-3": {
-      image: "/mail2.png",
-      alt: "Identity management",
+      image: "/dashboard-light.png",
+      alt: "Recruiter sharing workflow",
     },
     "item-4": {
-      image: "/payments.png",
-      alt: "Analytics dashboard",
+      image: "/dashboard.png",
+      alt: "Application tracking dashboard",
     },
   };
 
   return (
-    <section className="py-12 md:py-20 lg:py-32">
+    <section id="solution" className="py-12 md:py-20 lg:py-32">
       <div className="bg-linear-to-b absolute inset-0 -z-10 sm:inset-6 sm:rounded-b-3xl dark:block dark:to-[color-mix(in_oklab,var(--color-zinc-900)_75%,var(--color-background))]"></div>
       <div className="mx-auto max-w-5xl space-y-8 px-6 md:space-y-16 lg:space-y-20 dark:[--color-border:color-mix(in_oklab,var(--color-white)_10%,transparent)]">
         <div className="relative z-10 mx-auto max-w-2xl space-y-6 text-center">
           <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-            The foundation for AI
+            One place for every CV workflow
           </h2>
           <p>
-            Lyra is evolving to be more than just the models. It supports an
-            entire to the APIs and platforms helping developers and businesses
-            innovate.
+            Organize CV versions by role, share the right one in seconds, and
+            understand how each link performs after you send it.
           </p>
         </div>
 
@@ -65,52 +64,48 @@ export default function Features2() {
               <AccordionTrigger>
                 <div className="flex items-center gap-2 text-base">
                   <Database className="size-4" />
-                  Database Visualization
+                  Link analytics
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                Lyra is evolving to be more than just the models. It supports an
-                entire to the APIs and platforms helping developers and
-                businesses innovate.
+                Track openings for every shared CV link and spot which
+                applications are getting recruiter attention.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
               <AccordionTrigger>
                 <div className="flex items-center gap-2 text-base">
                   <Fingerprint className="size-4" />
-                  Advanced Authentication
+                  Version control
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                Lyra is evolving to be more than just the models. It supports an
-                entire to the APIs and platforms helping developers and
-                businesses innovate.
+                Keep tailored CVs for different roles without losing track of
+                what was shared, updated, or archived.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
               <AccordionTrigger>
                 <div className="flex items-center gap-2 text-base">
                   <IdCard className="size-4" />
-                  Identity Management
+                  Recruiter-ready sharing
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                Lyra is evolving to be more than just the models. It supports an
-                entire to the APIs and platforms helping developers and
-                businesses innovate.
+                Send clean links instead of attachments and keep every shared
+                document accessible across devices.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-4">
               <AccordionTrigger>
                 <div className="flex items-center gap-2 text-base">
                   <ChartBarIncreasingIcon className="size-4" />
-                  Analytics Dashboard
+                  Application visibility
                 </div>
               </AccordionTrigger>
               <AccordionContent>
-                Lyra is evolving to be more than just the models. It supports an
-                entire to the APIs and platforms helping developers and
-                businesses innovate.
+                Use link activity as a signal for follow-ups, interview prep,
+                and deciding which CV versions are working.
               </AccordionContent>
             </AccordionItem>
           </Accordion>

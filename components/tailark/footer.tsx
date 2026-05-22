@@ -6,27 +6,23 @@ import GetMyCV from "../GetMyCV";
 const links = [
   {
     title: "Features",
-    href: "#",
+    href: "#features",
   },
   {
     title: "Solution",
-    href: "#",
+    href: "#solution",
   },
   {
-    title: "Customers",
-    href: "#",
+    title: "Benefits",
+    href: "#benefits",
   },
   {
-    title: "Pricing",
-    href: "#",
+    title: "Get started",
+    href: "#start",
   },
   {
-    title: "Help",
-    href: "#",
-  },
-  {
-    title: "About",
-    href: "#",
+    title: "Sign in",
+    href: "/sign-in",
   },
 ];
 
@@ -37,7 +33,7 @@ export default function FooterSection() {
         <div className="flex justify-center w-full">
           <GetMyCV />
         </div>
-        <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
+        {/* <div className="my-8 flex flex-wrap justify-center gap-6 text-sm">
           {links.map((link, index) => (
             <Link
               key={index}
@@ -47,7 +43,7 @@ export default function FooterSection() {
               <span>{link.title}</span>
             </Link>
           ))}
-        </div>
+        </div> */}
 
         <span className="text-muted-foreground block text-center text-sm">
           {" "}

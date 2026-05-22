@@ -4,15 +4,15 @@ import { ReactNode } from "react";
 
 export default function Features1() {
   return (
-    <section className="py-16 md:py-32">
+    <section id="features" className="py-16 md:py-32">
       <div className="@container mx-auto max-w-5xl px-6">
         <div className="text-center">
           <h2 className="text-balance text-4xl font-semibold lg:text-5xl">
-            Built to cover your needs
+            Built for a cleaner job search
           </h2>
           <p className="mt-4">
-            Libero sapiente aliquam quibusdam aspernatur, praesentium iusto
-            repellendus.
+            Keep your CVs, share links, and recruiter activity in one focused
+            workspace.
           </p>
         </div>
         <div className="@min-4xl:max-w-full @min-4xl:grid-cols-3 mx-auto mt-8 grid max-w-sm gap-6 [--color-background:var(--color-muted)] [--color-card:var(--color-muted)] *:text-center md:mt-16 dark:[--color-muted:var(--color-zinc-900)]">
@@ -22,13 +22,13 @@ export default function Features1() {
                 <Zap className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Customizable</h3>
+              <h3 className="mt-6 font-medium">Shareable CV links</h3>
             </CardHeader>
 
             <CardContent>
               <p className="text-sm">
-                Extensive customization options, allowing you to tailor every
-                aspect to meet your specific needs.
+                Create a dedicated link for each CV so recruiters always get a
+                polished, easy-to-open version.
               </p>
             </CardContent>
           </Card>
@@ -39,13 +39,13 @@ export default function Features1() {
                 <Settings2 className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">You have full control</h3>
+              <h3 className="mt-6 font-medium">Update without resending</h3>
             </CardHeader>
 
             <CardContent>
               <p className="mt-3 text-sm">
-                From design elements to functionality, you have complete control
-                to create a unique and personalized experience.
+                Replace a document behind the same link when your experience,
+                projects, or role target changes.
               </p>
             </CardContent>
           </Card>
@@ -56,13 +56,13 @@ export default function Features1() {
                 <Sparkles className="size-6" aria-hidden />
               </CardDecorator>
 
-              <h3 className="mt-6 font-medium">Powered By AI</h3>
+              <h3 className="mt-6 font-medium">Track recruiter views</h3>
             </CardHeader>
 
             <CardContent>
               <p className="mt-3 text-sm">
-                Elements to functionality, you have complete control to create a
-                unique experience.
+                See when shared links are opened so you can follow up with
+                better timing and context.
               </p>
             </CardContent>
           </Card>
