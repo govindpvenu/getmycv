@@ -8,9 +8,13 @@ import {
   ChartArea,
   Earth,
   FileBox,
+  FileText,
   LockKeyhole,
   PackagePlus,
+  Plus,
+  ShieldCheck,
   SquareArrowOutUpRightIcon,
+  TrendingUp,
 } from "lucide-react";
 import {
   Dialog,
@@ -47,7 +51,7 @@ import {
 } from "@/components/ui/drawer";
 import { PartialLineChart } from "@/components/evil-charts/PartialLineChart";
 import { getContainerMonthlyStats } from "@/db/data";
-import { Suspense } from "react";
+import { Suspense, type ReactNode } from "react";
 import DeleteButton from "./_components/DeleteButton";
 import { Spinner } from "@/components/ui/spinner";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -57,12 +61,10 @@ export default async function DashboardPage() {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-  console.log("session:", session);
 
   if (!session) redirect("/sign-in");
 
   const username = session?.user.username;
-  console.log("username:", username);
   if (!username) redirect("/dashboard/profile");
 
   return (
@@ -87,37 +89,68 @@ async function ContainerList({
     .select()
     .from(container)
     .where(eq(container.userId, userId));
-  console.log("containers: ", containers);
-  return (
-    <div className="flex  flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
-      <CreateContainerCard />
+  const containerCount = containers.length;
+  const publicCount = containers.filter((item) => !item.isPrivate).length;
+  const privateCount = containerCount - publicCount;
 
-      {containers.map((container) => (
-        <ContainerCard
-          key={container.id}
-          username={username}
-          container={container}
-        />
-      ))}
+  return (
+    <div className="h-full overflow-y-auto p-4 sm:p-6 md:p-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6">
+        <section className="flex flex-col gap-4 rounded-lg border bg-background p-5 shadow-sm md:flex-row md:items-end md:justify-between">
+          <div className="max-w-2xl space-y-2">
+            <div className="space-y-1">
+              <h1 className="text-2xl font-semibold text-foreground md:text-3xl">
+                Resume containers
+              </h1>
+              <p className="text-sm leading-6 text-muted-foreground">
+                Create shareable resume links, keep drafts private, and track
+                how each version performs.
+              </p>
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-2 text-sm md:min-w-sm">
+            <DashboardStat label="Total" value={containerCount} />
+            <DashboardStat label="Public" value={publicCount} />
+            <DashboardStat label="Private" value={privateCount} />
+          </div>
+        </section>
+
+        {containerCount === 0 ? (
+          <EmptyDashboard username={username} />
+        ) : (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+            <CreateContainerCard username={username} />
+
+            {containers.map((container) => (
+              <ContainerCard
+                key={container.id}
+                username={username}
+                container={container}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
 function ContainerListSkeleton() {
   return (
-    <div className="flex  flex-row gap-4 justify-center items-center sm:justify-start sm:items-start flex-wrap p-2 md:p-10 overflow-y-auto h-full">
-      <CreateContainerCard />
-
-      <ContainerCardSkeleton />
-      <ContainerCardSkeleton />
-      <ContainerCardSkeleton />
+    <div className="h-full overflow-y-auto p-4 sm:p-6 md:p-10">
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        <ContainerCardSkeleton />
+        <ContainerCardSkeleton />
+        <ContainerCardSkeleton />
+        <ContainerCardSkeleton />
+      </div>
     </div>
   );
 }
 
 function ContainerCardSkeleton() {
   return (
-    <div className="w-full max-w-xs h-96 p-0 flex items-center justify-between hover:border-primary transition-all duration-300 group">
+    <div className="h-80 w-full p-0">
       <Skeleton className="w-full h-full border" />
     </div>
   );
@@ -130,7 +163,7 @@ function ContainerCard({
   container: containerType;
 }) {
   return (
-    <Card className="w-full max-w-xs h-96 py-2 flex bg-accent items-center justify-between hover:border-primary transition-all duration-300 group">
+    <Card className="group flex h-80 w-full justify-between overflow-hidden bg-background py-2 transition-all duration-300 hover:border-primary hover:shadow-md">
       <CardHeader className="w-full px-4  flex flex-col justify-between items-start">
         <CardTitle className=" text-lg font-bold text-primary">
           {container.title}
@@ -238,24 +271,119 @@ async function ContainerStats({ containerId }: { containerId: string }) {
   );
 }
 
-function CreateContainerCard() {
+function CreateContainerCard({ username }: { username: string }) {
   return (
     <Dialog>
       <DialogTrigger
-        className="bg-accent text-card-foreground group flex h-96 w-full max-w-xs flex-col items-center justify-center gap-6 rounded-xl border border-dashed border-primary/80 py-6 shadow-sm transition-all duration-300 hover:border-primary"
+        className="group flex h-80 w-full flex-col justify-between rounded-lg border border-dashed border-primary/70 bg-primary/5 p-5 text-left text-card-foreground shadow-sm transition-all duration-300 hover:border-primary hover:bg-primary/10 hover:shadow-md focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] focus-visible:outline-none"
         aria-label="Create a new container"
       >
-        <PackagePlus className="size-16 text-primary transition-all duration-300 group-hover:scale-105" />
+        <div className="flex items-start justify-between gap-4">
+          <span className="flex size-11 items-center justify-center rounded-lg bg-primary text-primary-foreground shadow-sm">
+            <PackagePlus className="size-5" />
+          </span>
+          <span className="flex size-8 items-center justify-center rounded-full border bg-background text-primary transition-transform group-hover:scale-105">
+            <Plus className="size-4" />
+          </span>
+        </div>
+        <div className="space-y-3">
+          <div className="space-y-1">
+            <p className="text-lg font-semibold text-foreground">
+              Create resume container
+            </p>
+            <p className="text-sm leading-6 text-muted-foreground">
+              Upload a PDF, choose a public link, and start tracking views and
+              downloads.
+            </p>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            <Badge variant="secondary">PDF upload</Badge>
+            <Badge variant="outline">Private by default</Badge>
+          </div>
+        </div>
       </DialogTrigger>
-      <DialogContent>
+      <DialogContent className="max-h-[92vh] gap-3 overflow-y-auto p-4 sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Create a new container</DialogTitle>
           <DialogDescription>
-            Upload you resume to manage and track you resume.
+            Add your resume and set its share link.
           </DialogDescription>
         </DialogHeader>
-        <CreateContainerForm />
+        <CreateContainerForm username={username} />
       </DialogContent>
     </Dialog>
+  );
+}
+
+function DashboardStat({ label, value }: { label: string; value: number }) {
+  return (
+    <div className="rounded-lg border bg-muted/30 px-3 py-2">
+      <p className="text-xs text-muted-foreground">{label}</p>
+      <p className="text-xl font-semibold text-foreground">{value}</p>
+    </div>
+  );
+}
+
+function EmptyDashboard({ username }: { username: string }) {
+  return (
+    <section className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_22rem]">
+      <div className="rounded-lg border bg-background p-6 shadow-sm">
+        <div className="flex max-w-2xl flex-col gap-6">
+          <div className="flex size-12 items-center justify-center rounded-lg bg-secondary/15 text-secondary">
+            <FileText className="size-6" />
+          </div>
+          <div className="space-y-2">
+            <h2 className="text-xl font-semibold text-foreground">
+              Set up your first resume link
+            </h2>
+            <p className="text-sm leading-6 text-muted-foreground">
+              New workspaces start empty. Create a container for each resume
+              version, role, or campaign so every shared link has its own access
+              setting and analytics.
+            </p>
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <EmptyDashboardItem
+              icon={<FileText className="size-4" />}
+              title="Upload PDF"
+              description="Add the resume file you want to share."
+            />
+            <EmptyDashboardItem
+              icon={<ShieldCheck className="size-4" />}
+              title="Control access"
+              description="Keep it private until the link is ready."
+            />
+            <EmptyDashboardItem
+              icon={<TrendingUp className="size-4" />}
+              title="Track activity"
+              description="Review views and downloads per container."
+            />
+          </div>
+        </div>
+      </div>
+      <CreateContainerCard username={username} />
+    </section>
+  );
+}
+
+function EmptyDashboardItem({
+  icon,
+  title,
+  description,
+}: {
+  icon: ReactNode;
+  title: string;
+  description: string;
+}) {
+  return (
+    <div className="rounded-lg border bg-muted/20 p-4">
+      <div className="mb-3 flex size-8 items-center justify-center rounded-md bg-background text-primary shadow-xs">
+        {icon}
+      </div>
+      <p className="text-sm font-medium text-foreground">{title}</p>
+      <p className="mt-1 text-xs leading-5 text-muted-foreground">
+        {description}
+      </p>
+    </div>
   );
 }

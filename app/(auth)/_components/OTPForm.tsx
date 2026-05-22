@@ -60,7 +60,7 @@ export function OTPForm({ stage }: { stage: Stage }) {
           setLoading(true);
         },
         onSuccess: async () => {
-          router.push("/");
+          router.push("/dashboard");
         },
         onError: (ctx) => {
           setLoading(false);

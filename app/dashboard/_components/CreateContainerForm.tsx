@@ -9,7 +9,6 @@ import {
   FieldGroup,
   FieldContent,
   FieldLabel,
-  FieldDescription,
   FieldError,
 } from "@/components/ui/field";
 import { Button } from "@/components/ui/button";
@@ -67,9 +66,11 @@ async function checkSlugAvailability(slug: string) {
   return { available: true, message: null };
 }
 
-export function CreateContainerForm() {
+export function CreateContainerForm({ username }: { username: string }) {
   const router = useRouter();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "https://rxresu.me";
+  const linkPrefix = `${baseUrl.replace(/\/$/, "")}/${username}/`;
   const form = useForm<Schema>({
     resolver: zodResolver(containerSchema),
     defaultValues: {
@@ -82,7 +83,6 @@ export function CreateContainerForm() {
   });
 
   const handleSubmit = form.handleSubmit(async (data: Schema) => {
-    console.log("handleSubmit data:", data);
     try {
       const slugAvailability = await checkSlugAvailability(data.slug);
 
@@ -105,7 +105,6 @@ export function CreateContainerForm() {
         }),
       });
 
-      console.log("newBlob:", newBlob);
       const createResponse = await fetch("/api/resume/upload", {
         method: "POST",
         headers: {
@@ -142,9 +141,8 @@ export function CreateContainerForm() {
       toast.error(message);
     }
   });
-
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col  w-full  gap-2 ">
+    <form onSubmit={handleSubmit} className="flex w-full flex-col gap-4">
       <DialogClose asChild>
         <button
           ref={closeButtonRef}
@@ -155,14 +153,14 @@ export function CreateContainerForm() {
           Close
         </button>
       </DialogClose>
-      <FieldGroup>
+
+      <FieldGroup className="gap-3">
         <Controller
           name="title"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="gap-1">
-              <FieldLabel htmlFor="title">Title *</FieldLabel>
-
+              <FieldLabel htmlFor="title">Title</FieldLabel>
               <Input
                 {...field}
                 id="title"
@@ -189,14 +187,23 @@ export function CreateContainerForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="gap-1">
-              <FieldLabel htmlFor="slug">Slug *</FieldLabel>
-              <Input
-                {...field}
-                id="slug"
-                type="text"
+              <FieldLabel htmlFor="slug">Link slug</FieldLabel>
+              <div
+                className="flex min-h-10 items-center rounded-md border border-input bg-background px-3 text-sm shadow-xs transition-[color,box-shadow] focus-within:border-ring focus-within:ring-[3px] focus-within:ring-ring/50"
                 aria-invalid={fieldState.invalid}
-                placeholder="full-stack-developer"
-              />
+              >
+                <span className="shrink-0 text-muted-foreground">
+                  {linkPrefix}
+                </span>
+                <Input
+                  {...field}
+                  id="slug"
+                  type="text"
+                  className="h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-0 shadow-none focus-visible:ring-0"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="full-stack-developer"
+                />
+              </div>
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
@@ -206,12 +213,13 @@ export function CreateContainerForm() {
           name="is_private"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field orientation="horizontal" data-invalid={fieldState.invalid}>
+            <Field
+              orientation="horizontal"
+              data-invalid={fieldState.invalid}
+              className="rounded-lg border bg-muted/20 p-3"
+            >
               <FieldContent>
-                <FieldLabel htmlFor="is_private">Private *</FieldLabel>
-                <FieldDescription>
-                  Anyone with the link can view your resume.
-                </FieldDescription>
+                <FieldLabel htmlFor="is_private">Private</FieldLabel>
                 {fieldState.invalid && (
                   <FieldError errors={[fieldState.error]} />
                 )}
@@ -232,10 +240,7 @@ export function CreateContainerForm() {
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid} className="gap-1">
-              <FieldLabel htmlFor="resume">Upload Resume *</FieldLabel>
-              <FieldDescription id="resume-help" className="mb-4">
-                Drop or upload your resume (max 5 MB)
-              </FieldDescription>
+              <FieldLabel htmlFor="resume">Resume PDF</FieldLabel>
               <Input
                 id="resume"
                 name={field.name}
@@ -243,7 +248,6 @@ export function CreateContainerForm() {
                 accept="application/pdf"
                 className="sr-only "
                 aria-invalid={fieldState.invalid}
-                aria-describedby="resume-help"
                 onBlur={field.onBlur}
                 ref={field.ref}
                 onChange={(event) =>
@@ -252,35 +256,39 @@ export function CreateContainerForm() {
               />
               <label
                 htmlFor="resume"
-                className="group flex flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-muted-foreground/40 bg-muted/20 px-4 py-6 text-center transition hover:border-primary hover:bg-background"
+                className="group flex min-h-28 flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-muted-foreground/40 bg-muted/20 px-4 py-4 text-center transition hover:border-primary hover:bg-background"
               >
-                <UploadCloud className="h-8 w-8 text-muted-foreground transition group-hover:text-primary" />
+                <span className="flex size-10 items-center justify-center rounded-lg bg-background text-muted-foreground shadow-xs transition group-hover:text-primary">
+                  <UploadCloud className="size-5" />
+                </span>
                 <div className="space-y-1">
                   <p className="text-sm font-medium text-foreground">
-                    {field.value?.name ?? "Select your latest resume"}
+                    {field.value?.name ?? "Choose PDF"}
                   </p>
                   <p className="text-xs text-muted-foreground">
-                    {field.value
-                      ? "Click to replace the current file"
-                      : "PDF only · drag & drop supported"}
+                    {field.value ? "Click to replace" : "Max 10 MB"}
                   </p>
                 </div>
               </label>
-              {field.value && (
-                <p className="text-xs text-muted-foreground">
-                  Selected file:{" "}
-                  <span className="font-medium text-foreground">
-                    {field.value.name}
-                  </span>
-                </p>
-              )}
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
 
-        <Button type="submit" size="sm" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? <Spinner /> : "Create Container"}
+        <Button
+          type="submit"
+          size="sm"
+          className="w-full"
+          disabled={form.formState.isSubmitting}
+        >
+          {form.formState.isSubmitting ? (
+            <>
+              <Spinner />
+              Creating container
+            </>
+          ) : (
+            "Create container"
+          )}
         </Button>
       </FieldGroup>
     </form>
