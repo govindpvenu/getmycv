@@ -21,12 +21,47 @@ import { UploadCloud } from "lucide-react";
 
 type Schema = z.infer<typeof containerSchema>;
 
+const SLUG_TAKEN_MESSAGE =
+  "This slug already exists. Please choose a different slug.";
+
 function slugify(input: string) {
   return input
     .toLowerCase()
     .trim()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
+}
+
+async function checkSlugAvailability(slug: string) {
+  const response = await fetch("/api/containers/slug", {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({ slug }),
+  });
+
+  const result = (await response.json().catch(() => null)) as {
+    available?: boolean;
+    message?: string;
+    error?: string;
+  } | null;
+
+  if (response.status === 409 || result?.available === false) {
+    return {
+      available: false,
+      message: result?.message ?? SLUG_TAKEN_MESSAGE,
+    };
+  }
+
+  if (!response.ok) {
+    return {
+      available: false,
+      message: result?.error ?? "Unable to verify slug",
+    };
+  }
+
+  return { available: true, message: null };
 }
 
 export function CreateContainerForm() {
@@ -44,6 +79,17 @@ export function CreateContainerForm() {
   const handleSubmit = form.handleSubmit(async (data: Schema) => {
     console.log("handleSubmit data:", data);
     try {
+      const slugAvailability = await checkSlugAvailability(data.slug);
+
+      if (!slugAvailability.available) {
+        form.setError("slug", {
+          type: "server",
+          message: slugAvailability.message ?? SLUG_TAKEN_MESSAGE,
+        });
+        toast.error(slugAvailability.message ?? SLUG_TAKEN_MESSAGE);
+        return;
+      }
+
       const newBlob = await upload(data.resume.name, data.resume, {
         access: "public",
         handleUploadUrl: "/api/resume/upload",
@@ -55,17 +101,13 @@ export function CreateContainerForm() {
       });
 
       console.log("newBlob:", newBlob);
-    } catch (error: unknown) {
-      console.error("error:", error);
-      console.log(
-        "error:",
-        error instanceof Error ? error.message : "Unknown error",
-      );
-      toast.error(
-        `Failed to create container: ${error instanceof Error ? error.message : "Unknown error"}`,
-      );
-    } finally {
       form.reset();
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Failed to create container";
+
+      console.error("Failed to create container:", error);
+      toast.error(message);
     }
   });
 
