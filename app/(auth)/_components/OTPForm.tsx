@@ -38,9 +38,6 @@ export function OTPForm({ stage }: { stage: Stage }) {
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
-    defaultValues: {
-      otp: "",
-    },
   });
 
   // if (stage.stage === "email-verification") {

@@ -73,12 +73,6 @@ export function CreateContainerForm({ username }: { username: string }) {
   const linkPrefix = `${baseUrl.replace(/\/$/, "")}/${username}/`;
   const form = useForm<Schema>({
     resolver: zodResolver(containerSchema),
-    defaultValues: {
-      title: "Full Stack Developer",
-      slug: "full-stack-developer",
-      is_private: true,
-      resume: undefined,
-    },
     mode: "onSubmit",
   });
 
@@ -163,6 +157,7 @@ export function CreateContainerForm({ username }: { username: string }) {
               <FieldLabel htmlFor="title">Title</FieldLabel>
               <Input
                 {...field}
+                value={field.value ?? ""}
                 id="title"
                 type="text"
                 onChange={(e) => {
@@ -197,6 +192,7 @@ export function CreateContainerForm({ username }: { username: string }) {
                 </span>
                 <Input
                   {...field}
+                  value={field.value ?? ""}
                   id="slug"
                   type="text"
                   className="h-auto min-w-0 flex-1 border-0 bg-transparent px-0 py-0 shadow-none focus-visible:ring-0"
@@ -227,7 +223,7 @@ export function CreateContainerForm({ username }: { username: string }) {
               <Switch
                 id="is_private"
                 name={field.name}
-                checked={field.value}
+                checked={field.value ?? true}
                 onCheckedChange={field.onChange}
                 aria-invalid={fieldState.invalid}
               />

@@ -38,10 +38,6 @@ export function ResetPasswordForm({ token }: { token: string }) {
   const [isLoading, setIsLoading] = useState(false);
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      new_password: "12345678",
-      confirm_password: "12345678",
-    },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -102,6 +98,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
                     <FormControl>
                       <Password
                         {...field}
+                        value={field.value ?? ""}
                         required
                         placeholder="New Password"
                       />
@@ -122,6 +119,7 @@ export function ResetPasswordForm({ token }: { token: string }) {
                     <FormControl>
                       <Password
                         {...field}
+                        value={field.value ?? ""}
                         required
                         placeholder="Confirm Password"
                       />

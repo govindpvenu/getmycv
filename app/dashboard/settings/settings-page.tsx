@@ -89,14 +89,15 @@ const passwordSchema = z
     confirmPassword: z
       .string()
       .min(8, { message: "Password must be at least 8 characters" }),
-    revokeOtherSessions: z.boolean(),
+    revokeOtherSessions: z.boolean().default(true),
   })
   .refine((values) => values.newPassword === values.confirmPassword, {
     message: "Passwords do not match",
     path: ["confirmPassword"],
   });
 
-type PasswordValues = z.infer<typeof passwordSchema>;
+type PasswordFormValues = z.input<typeof passwordSchema>;
+type PasswordValues = z.output<typeof passwordSchema>;
 
 const themeOptions = [
   {
@@ -213,14 +214,8 @@ function AppearanceSettings() {
 
 function PasswordSettings() {
   const [isLoading, setIsLoading] = useState(false);
-  const form = useForm<PasswordValues>({
+  const form = useForm<PasswordFormValues, unknown, PasswordValues>({
     resolver: zodResolver(passwordSchema),
-    defaultValues: {
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
-      revokeOtherSessions: true,
-    },
   });
 
   async function onSubmit(values: PasswordValues) {
@@ -270,6 +265,7 @@ function PasswordSettings() {
                     </FieldLabel>
                     <Password
                       {...field}
+                      value={field.value ?? ""}
                       id={field.name}
                       autoComplete="current-password"
                       aria-invalid={fieldState.invalid}
@@ -290,6 +286,7 @@ function PasswordSettings() {
                     <FieldLabel htmlFor={field.name}>New password</FieldLabel>
                     <Password
                       {...field}
+                      value={field.value ?? ""}
                       id={field.name}
                       autoComplete="new-password"
                       aria-invalid={fieldState.invalid}
@@ -312,6 +309,7 @@ function PasswordSettings() {
                     </FieldLabel>
                     <Password
                       {...field}
+                      value={field.value ?? ""}
                       id={field.name}
                       autoComplete="new-password"
                       aria-invalid={fieldState.invalid}
@@ -332,7 +330,7 @@ function PasswordSettings() {
                 <Field orientation="horizontal">
                   <Checkbox
                     id={field.name}
-                    checked={field.value}
+                    checked={field.value ?? true}
                     onCheckedChange={(checked) =>
                       field.onChange(checked === true)
                     }

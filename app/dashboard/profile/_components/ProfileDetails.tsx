@@ -41,7 +41,7 @@ export default function ProfileDetails({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    values: {
       firstName: user.first_name,
       lastName: user.last_name,
       userName: user.username || "",
@@ -98,6 +98,7 @@ export default function ProfileDetails({
                   <FieldLabel htmlFor={field.name}>First name</FieldLabel>
                   <Input
                     {...field}
+                    value={field.value ?? ""}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
                     placeholder="Enter your first name"
@@ -116,6 +117,7 @@ export default function ProfileDetails({
                   <FieldLabel htmlFor={field.name}>Last name</FieldLabel>
                   <Input
                     {...field}
+                    value={field.value ?? ""}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
                     placeholder="Enter your last name"
@@ -135,6 +137,7 @@ export default function ProfileDetails({
                   <FieldLabel htmlFor={field.name}>Username</FieldLabel>
                   <Input
                     {...field}
+                    value={field.value ?? ""}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
                     placeholder="Enter your username"

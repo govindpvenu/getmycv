@@ -76,11 +76,11 @@ async function checkSlugAvailability(slug: string) {
 export function EditContainerForm({ container }: { container: containerType }) {
   const form = useForm<Schema>({
     resolver: zodResolver(containerSchema),
-    defaultValues: {
+    values: {
       title: container.title,
       slug: container.slug,
       is_private: container.isPrivate,
-      resume: undefined,
+      resume: undefined as unknown as File,
     },
     mode: "onSubmit",
   });
@@ -146,6 +146,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
 
                     <Input
                       {...field}
+                      value={field.value ?? ""}
                       id="title"
                       type="text"
                       onChange={(e) => {
@@ -175,6 +176,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
                     <FieldLabel htmlFor="slug">Slug *</FieldLabel>
                     <Input
                       {...field}
+                      value={field.value ?? ""}
                       id="slug"
                       type="text"
                       aria-invalid={fieldState.invalid}
@@ -207,7 +209,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
                     <Switch
                       id="is_private"
                       name={field.name}
-                      checked={field.value}
+                      checked={field.value ?? false}
                       onCheckedChange={field.onChange}
                       aria-invalid={fieldState.invalid}
                     />

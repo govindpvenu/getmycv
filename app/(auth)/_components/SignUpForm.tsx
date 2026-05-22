@@ -62,14 +62,6 @@ export function SignUpForm({ email }: { email: string }) {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      first_name: "test",
-      last_name: "user",
-      username: "govind",
-      email: email || "test@test.com",
-      password: "12345678",
-      confirm_password: "12345678",
-    },
   });
 
   // 2. Define a submit handler.
@@ -142,7 +134,7 @@ export function SignUpForm({ email }: { email: string }) {
                     <FormControl>
                       <Input
                         type={"text"}
-                        value={field.value}
+                        value={field.value ?? ""}
                         onChange={(e) => {
                           const val = e.target.value;
                           field.onChange(val);
@@ -164,7 +156,7 @@ export function SignUpForm({ email }: { email: string }) {
                     <FormControl>
                       <Input
                         type={"text"}
-                        value={field.value}
+                        value={field.value ?? ""}
                         onChange={(e) => {
                           const val = e.target.value;
                           field.onChange(val);
@@ -188,7 +180,7 @@ export function SignUpForm({ email }: { email: string }) {
                   <FormControl>
                     <Input
                       type={"text"}
-                      value={field.value}
+                      value={field.value ?? ""}
                       onChange={(e) => {
                         const val = e.target.value;
 
@@ -247,7 +239,7 @@ export function SignUpForm({ email }: { email: string }) {
                   <FormControl>
                     <Input
                       type={"email"}
-                      value={field.value}
+                      value={field.value ?? email ?? ""}
                       onChange={(e) => {
                         const val = e.target.value;
                         field.onChange(val);
@@ -269,7 +261,12 @@ export function SignUpForm({ email }: { email: string }) {
                   <FormItem className="w-full">
                     <FormLabel>Password *</FormLabel>
                     <FormControl>
-                      <Password {...field} required placeholder="Password" />
+                      <Password
+                        {...field}
+                        value={field.value ?? ""}
+                        required
+                        placeholder="Password"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -287,6 +284,7 @@ export function SignUpForm({ email }: { email: string }) {
                     <FormControl>
                       <Password
                         {...field}
+                        value={field.value ?? ""}
                         required
                         placeholder="Confirm Password"
                       />

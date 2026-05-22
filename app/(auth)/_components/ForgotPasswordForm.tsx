@@ -27,9 +27,6 @@ export default function ForgotPasswordForm({ email }: { email: string }) {
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: email || "",
-    },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -86,7 +83,7 @@ export default function ForgotPasswordForm({ email }: { email: string }) {
                     <FormControl>
                       <Input
                         type={"email"}
-                        value={field.value}
+                        value={field.value ?? email ?? ""}
                         onChange={(e) => {
                           const val = e.target.value;
                           field.onChange(val);

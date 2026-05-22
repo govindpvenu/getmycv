@@ -56,11 +56,6 @@ export function SignInForm() {
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email_or_username: "test@test.com",
-      password: "12345678",
-      remember_me: true,
-    },
   });
 
   const emailOrUsername = useWatch({
@@ -173,7 +168,7 @@ export function SignInForm() {
                     <FormControl>
                       <Input
                         type={"email_or_username"}
-                        value={field.value}
+                        value={field.value ?? ""}
                         onChange={(e) => {
                           const val = e.target.value;
                           field.onChange(val);
@@ -203,7 +198,12 @@ export function SignInForm() {
                       </Link>
                     </div>
                     <FormControl>
-                      <Password {...field} required placeholder="Password" />
+                      <Password
+                        {...field}
+                        value={field.value ?? ""}
+                        required
+                        placeholder="Password"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -218,7 +218,7 @@ export function SignInForm() {
                   <FormItem className="flex flex-row items-center ">
                     <FormControl>
                       <Checkbox
-                        checked={field.value}
+                        checked={field.value ?? true}
                         onCheckedChange={field.onChange}
                       />
                     </FormControl>
