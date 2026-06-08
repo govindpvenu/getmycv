@@ -74,6 +74,8 @@ async function checkSlugAvailability(slug: string) {
 }
 
 export function EditContainerForm({ container }: { container: containerType }) {
+  const formId = `edit-container-form-${container.id}`;
+
   const form = useForm<Schema>({
     resolver: zodResolver(containerSchema),
     values: {
@@ -132,6 +134,7 @@ export function EditContainerForm({ container }: { container: containerType }) {
       </SheetHeader>
       <div className="grid flex-1 auto-rows-min gap-6 px-4">
         <form
+          id={formId}
           onSubmit={handleSubmit}
           className="flex flex-col    w-full justify-between  gap-2 "
         >
@@ -275,7 +278,12 @@ export function EditContainerForm({ container }: { container: containerType }) {
         </form>
       </div>
       <SheetFooter>
-        <Button type="submit" size="sm" disabled={form.formState.isSubmitting}>
+        <Button
+          type="submit"
+          form={formId}
+          size="sm"
+          disabled={form.formState.isSubmitting}
+        >
           {form.formState.isSubmitting ? <Spinner /> : "Save Changes"}
         </Button>
         <SheetClose asChild>
